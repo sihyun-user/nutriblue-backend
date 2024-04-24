@@ -2,7 +2,7 @@ import express from 'express';
 
 interface ApiResponse {
   res: express.Response;
-  data: any;
+  data?: any;
   message: string;
 }
 
