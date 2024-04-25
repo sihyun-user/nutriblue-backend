@@ -16,7 +16,7 @@ const usersController = {
     try {
       const { id } = req.params;
 
-      const deleteUser = await deleteUserById(id);
+      await deleteUserById(id);
 
       return appSuccess({ res, message: '刪除會員成功' });
     } catch (error) {}
@@ -26,10 +26,14 @@ const usersController = {
       const { id } = req.params;
       const { username } = req.body;
 
-      if (!username) return appError({ res, apiState: apiState.DATA_MISSING });
+      if (!username) {
+        return appError({ res, apiState: apiState.DATA_MISSING });
+      }
 
       const user = await getUserById(id);
-      if (!user) return appError({ res, apiState: apiState.USER_NOT_EXIST });
+      if (!user) {
+        return appError({ res, apiState: apiState.USER_NOT_EXIST });
+      }
 
       user.username = username;
       await user.save();

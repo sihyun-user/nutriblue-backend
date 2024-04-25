@@ -10,7 +10,9 @@ const authController = {
     try {
       const { email, password } = req.body;
 
-      if (!email || !password) return appError({ res, apiState: apiState.DATA_MISSING });
+      if (!email || !password) {
+        return appError({ res, apiState: apiState.DATA_MISSING });
+      }
 
       const user = await getUserByEmail(email).select(
         '+authentication.salt +authentication.password'
