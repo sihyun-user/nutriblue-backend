@@ -16,12 +16,15 @@ const authController = {
         '+authentication.salt +authentication.password'
       );
 
-      if (!user) return appError({ res, apiState: { statusCode: 400, message: 'Email錯誤' } });
+      if (!user) {
+        return appError({ res, apiState: apiState.USER_EAMIL_NOT_EXIST });
+      }
 
       const expectedHash = authentication(user.authentication?.salt ?? '', password);
 
-      if (user.authentication?.password !== expectedHash)
-        return appError({ res, apiState: { statusCode: 400, message: '密碼錯誤' } });
+      if (user.authentication?.password !== expectedHash) {
+        return appError({ res, apiState: apiState.USER_PASSWORD_ERROR });
+      }
 
       const newSalt = random();
       user.authentication.sessionToken = authentication(newSalt, user._id.toString());
@@ -32,23 +35,25 @@ const authController = {
         domain: 'localhost',
         path: '/'
       });
-      appSuccess({ res, data: user, message: '會員登入成功' });
+      appSuccess({ res, message: '會員登入成功' });
     } catch (error) {}
   },
   register: async (req: express.Request, res: express.Response) => {
     try {
       const { username, email, password } = req.body;
 
-      if (!username || !email || !password)
+      if (!username || !email || !password) {
         return appError({ res, apiState: apiState.DATA_MISSING });
+      }
 
       const existingUser = await getUserByEmail(email);
 
-      if (existingUser)
-        return appError({ res, apiState: { statusCode: 400, message: 'Email已存在' } });
+      if (existingUser) {
+        return appError({ res, apiState: apiState.USER_EMAIL_EXIST });
+      }
 
       const salt = random();
-      const user = await createUser({
+      await createUser({
         username,
         email,
         authentication: {
@@ -57,7 +62,7 @@ const authController = {
         }
       });
 
-      return appSuccess({ res, data: user, message: '會員註冊成功' });
+      return appSuccess({ res, message: '會員註冊成功' });
     } catch (error) {}
   }
 };
