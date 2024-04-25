@@ -9,7 +9,19 @@ const usersController = {
     try {
       const users = await getUsers();
 
-      return appSuccess({ res, data: users, message: '取得所有會員成功' });
+      return appSuccess({ res, data: users, message: '取得所有會員資料成功' });
+    } catch (error) {}
+  },
+  getUser: async (req: express.Request, res: express.Response) => {
+    try {
+      const { id } = req.params;
+
+      const user = await getUserById(id);
+      if (!user) {
+        return appError({ res, apiState: apiState.USER_NOT_EXIST });
+      }
+
+      appSuccess({ res, data: user, message: '取得會員資料成功' });
     } catch (error) {}
   },
   deleteUser: async (req: express.Request, res: express.Response) => {
