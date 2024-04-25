@@ -1,7 +1,4 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const connect = async () => {
   try {
@@ -12,7 +9,9 @@ const connect = async () => {
         ? MONGODB_URI?.replace('<password>', MONGODB_PASSWORD || '')
         : MONGODB_LOCAL;
 
-    if (!conn) throw new Error('MongoDB URI is required!');
+    if (!conn) {
+      throw new Error('MongoDB URI is required!');
+    }
 
     await mongoose.connect(conn);
     console.log('資料庫連線成功');
