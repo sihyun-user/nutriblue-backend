@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 
 import connect from './connections';
 import router from './router';
+import errHandle from './middlewares/error';
 
 dotenv.config();
 
@@ -26,6 +27,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', router());
+
+app.use(errHandle);
 
 connect();
 

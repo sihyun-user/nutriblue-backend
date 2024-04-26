@@ -17,6 +17,7 @@
   "rules": {
     "semi": ["error", "always"],
     "comma-dangle": ["error", "never"],
-    "curly": ["error", "all"]
+    "curly": ["error", "all"],
+    "prefer-const": "off"
   }
 }

@@ -1,6 +1,6 @@
 import express from 'express';
 
-import authController from '../controllers/authentication';
+import * as authController from '../controllers/authentication';
 
 export default (router: express.Router) => {
   router.post('/auth/register', authController.register);
