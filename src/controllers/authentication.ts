@@ -2,16 +2,16 @@ import { RequestHandler } from 'express';
 
 import { authentication, random } from '../helpers';
 import { getUserByEmail, createUser } from '../modules/users';
-import { appSuccess, appError } from '../helpers/appResponses';
-import { errHandle } from '../helpers/response';
-import apiState from '../helpers/apiState';
+import AppSuccess from '../helpers/appSuccess';
+import AppError from '../helpers/appError';
+import errorState from '../helpers/errorState';
 
-export const login: RequestHandler = async (req, res) => {
+export const login: RequestHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return appError({ res, apiState: apiState.DATA_MISSING });
+      return next(new AppError(errorState.DATA_MISSING));
     }
 
     const user = await getUserByEmail(email).select(
@@ -19,13 +19,13 @@ export const login: RequestHandler = async (req, res) => {
     );
 
     if (!user) {
-      return appError({ res, apiState: apiState.USER_EAMIL_NOT_EXIST });
+      return new AppError(errorState.USER_EAMIL_NOT_EXIST);
     }
 
     const expectedHash = authentication(user.authentication?.salt ?? '', password);
 
     if (user.authentication?.password !== expectedHash) {
-      return appError({ res, apiState: apiState.USER_PASSWORD_ERROR });
+      return next(new AppError(errorState.USER_PASSWORD_ERROR));
     }
 
     const newSalt = random();
@@ -37,7 +37,7 @@ export const login: RequestHandler = async (req, res) => {
       domain: 'localhost',
       path: '/'
     });
-    appSuccess({ res, message: '會員登入成功' });
+    AppSuccess({ res, message: '會員登入成功' });
   } catch (error) {}
 };
 
@@ -46,13 +46,13 @@ export const register: RequestHandler = async (req, res, next) => {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
-      return next(errHandle(apiState.DATA_MISSING));
+      return next(new AppError(errorState.DATA_MISSING));
     }
 
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      return appError({ res, apiState: apiState.USER_EMAIL_EXIST });
+      return next(new AppError(errorState.USER_EMAIL_EXIST));
     }
 
     const salt = random();
@@ -65,8 +65,9 @@ export const register: RequestHandler = async (req, res, next) => {
       }
     });
 
-    return appSuccess({ res, message: '會員註冊成功' });
+    AppSuccess({ res, message: '會員註冊成功' });
   } catch (error) {
+    console.log('Caught an error:', error);
     next(error);
   }
 };

@@ -1,4 +1,4 @@
-const apiState = {
+const errorState = {
   FAIL: {
     statusCode: 500,
     message: '系統錯誤，請稍後再試'
@@ -42,7 +42,15 @@ const apiState = {
   PAGE_NOT_EXIST: {
     statusCode: 404,
     message: '頁面不存在'
+  },
+  SYNTAX_ERROR: {
+    statusCode: 400,
+    message: 'SyntaxError，請求語法錯誤或非JSON格式'
+  },
+  CAST_ERROR: {
+    statusCode: 400,
+    message: 'CastError，資料格式錯誤'
   }
 };
 
-export default apiState;
+export default errorState;

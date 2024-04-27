@@ -2,8 +2,8 @@ import express from 'express';
 import { get, merge } from 'lodash';
 
 import { getUserBySessionToken } from '../modules/users';
-import { appError } from '../helpers/appResponses';
-import apiState from '../helpers/apiState';
+import AppError from '../helpers/appError';
+import errorState from '../helpers/errorState';
 
 export const isOwner = async (
   req: express.Request,
@@ -15,11 +15,11 @@ export const isOwner = async (
     const currectUserId = (get(req, 'identity._id') ?? '') as string;
 
     if (!currectUserId) {
-      return appError({ res, apiState: apiState.AUTH_NOT_EXIST });
+      return next(new AppError(errorState.AUTH_NOT_EXIST));
     }
 
     if (currectUserId !== id) {
-      return appError({ res, apiState: apiState.AUTH_NOT_MATCH });
+      return next(new AppError(errorState.AUTH_NOT_MATCH));
     }
 
     next();
@@ -35,12 +35,12 @@ export const isAuthenticated = async (
     const sessionToken = req.cookies['ORANGELIFE-AUTH'];
 
     if (!sessionToken) {
-      return appError({ res, apiState: apiState.AUTH_NOT_EXIST });
+      return next(new AppError(errorState.AUTH_NOT_EXIST));
     }
 
     const existingUser = await getUserBySessionToken(sessionToken);
     if (!existingUser) {
-      return appError({ res, apiState: apiState.AUTH_NOT_VALID });
+      return next(new AppError(errorState.AUTH_NOT_VALID));
     }
 
     merge(req, {
