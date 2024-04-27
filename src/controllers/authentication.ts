@@ -21,7 +21,7 @@ export const login: RequestHandler = async (req, res, next) => {
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
-    if (passwordMatch) {
+    if (!passwordMatch) {
       return next(new AppError(errorState.USER_PASSWORD_ERROR));
     }
 
