@@ -35,13 +35,13 @@ const errHandle = (err: AppError, req: Request, res: Response, next: NextFunctio
 
   if (err instanceof SyntaxError) {
     err = new AppError(errorState.SYNTAX_ERROR);
-  };
+  }
   if (err.name === 'ValidationError') {
     err = new AppError(errorState.DATA_MISSING);
   }
   if (err.name === 'CastError') {
     err = new AppError(errorState.CAST_ERROR);
-  };
+  }
 
   isDev ? sendErrorDev(err, res) : sendErrorProd(err, res);
 };

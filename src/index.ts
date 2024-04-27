@@ -5,6 +5,8 @@ import compression from 'compression';
 import cors from 'cors';
 import logger from 'morgan';
 import dotenv from 'dotenv';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 
 import connect from './connections';
 import router from './router';
@@ -15,6 +17,23 @@ import errorState from './helpers/errorState';
 dotenv.config();
 
 const app = express();
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET as string,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24 * 7
+    },
+    rolling: true,
+    store: MongoStore.create({
+      mongoUrl:
+        process.env.NODE_ENV === 'production' ? process.env.MONGODB_URI : process.env.MONGODB_LOCAL
+    })
+  })
+);
 
 app.use(
   cors({

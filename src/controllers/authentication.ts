@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
+import bcrypt from 'bcryptjs';
 
-import { authentication, random } from '../helpers';
 import { getUserByEmail, createUser } from '../modules/users';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
@@ -14,29 +14,19 @@ export const login: RequestHandler = async (req, res, next) => {
       return next(new AppError(errorState.DATA_MISSING));
     }
 
-    const user = await getUserByEmail(email).select(
-      '+authentication.salt +authentication.password'
-    );
+    const user = await getUserByEmail(email).select('+password');
 
     if (!user) {
       return new AppError(errorState.USER_EAMIL_NOT_EXIST);
     }
 
-    const expectedHash = authentication(user.authentication?.salt ?? '', password);
-
-    if (user.authentication?.password !== expectedHash) {
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (passwordMatch) {
       return next(new AppError(errorState.USER_PASSWORD_ERROR));
     }
 
-    const newSalt = random();
-    user.authentication.sessionToken = authentication(newSalt, user._id.toString());
+    req.session.userId = user._id;
 
-    await user.save();
-
-    res.cookie('ORANGELIFE-AUTH', user.authentication.sessionToken, {
-      domain: 'localhost',
-      path: '/'
-    });
     AppSuccess({ res, message: '會員登入成功' });
   } catch (error) {}
 };
@@ -55,14 +45,12 @@ export const register: RequestHandler = async (req, res, next) => {
       return next(new AppError(errorState.USER_EMAIL_EXIST));
     }
 
-    const salt = random();
+    const passwordHashed = await bcrypt.hash(password, 12);
+
     await createUser({
       username,
       email,
-      authentication: {
-        salt,
-        password: authentication(salt, password)
-      }
+      password: passwordHashed
     });
 
     AppSuccess({ res, message: '會員註冊成功' });
