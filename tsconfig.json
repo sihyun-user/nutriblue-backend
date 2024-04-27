@@ -12,6 +12,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["node_modules/@types", "@types"]
   },
   "include": ["src/**/*.ts"],
+  "ts-node": {
+    "files": true
+  }
 }
