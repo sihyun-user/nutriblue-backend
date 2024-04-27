@@ -9,6 +9,8 @@ import dotenv from 'dotenv';
 import connect from './connections';
 import router from './router';
 import errHandle from './middlewares/error';
+import AppError from './helpers/appError';
+import errorState from './helpers/errorState';
 
 dotenv.config();
 
@@ -27,6 +29,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', router());
+
+app.use('*', (req, res, next) => {
+  next(new AppError(errorState.ROUTE_NOT_FOUND));
+});
 
 app.use(errHandle);
 

@@ -20,7 +20,7 @@ const sendErrorProd = (err: AppError, res: Response) => {
 };
 
 const sendErrorDev = (err: AppError, res: Response) => {
-  console.log('err:💥💥', err);
+  console.log('err:🚀🚀', err);
   return res.status(err.statusCode).json({
     status: false,
     error: err,

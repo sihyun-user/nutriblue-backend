@@ -39,9 +39,9 @@ const errorState = {
     statusCode: 403,
     message: '無權限執行此操作'
   },
-  PAGE_NOT_EXIST: {
+  ROUTE_NOT_FOUND: {
     statusCode: 404,
-    message: '頁面不存在'
+    message: '找不到此路由'
   },
   SYNTAX_ERROR: {
     statusCode: 400,
@@ -50,6 +50,10 @@ const errorState = {
   CAST_ERROR: {
     statusCode: 400,
     message: 'CastError，資料格式錯誤'
+  },
+  ID_NOT_VALID: {
+    statusCode: 400,
+    message: '無效的ID'
   }
 };
 

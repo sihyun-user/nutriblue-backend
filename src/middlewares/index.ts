@@ -1,15 +1,11 @@
-import express from 'express';
+import { RequestHandler } from 'express';
 import { get, merge } from 'lodash';
 
 import { getUserBySessionToken } from '../modules/users';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
 
-export const isOwner = async (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) => {
+export const isOwner: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
     const currectUserId = (get(req, 'identity._id') ?? '') as string;
@@ -26,11 +22,7 @@ export const isOwner = async (
   } catch (error) {}
 };
 
-export const isAuthenticated = async (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) => {
+export const isAuthenticated: RequestHandler = async (req, res, next) => {
   try {
     const sessionToken = req.cookies['ORANGELIFE-AUTH'];
 
