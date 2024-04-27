@@ -59,3 +59,13 @@ export const register: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const logout: RequestHandler = async (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) {
+      next(err);
+    } else {
+      AppSuccess({ res, message: '會員登出成功' });
+    }
+  });
+};
