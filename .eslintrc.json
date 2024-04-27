@@ -15,6 +15,6 @@
     "comma-dangle": ["error", "never"],
     "curly": ["error", "all"],
     "prefer-const": "off",
-    "space-before-function-paren": ["error", "never"]
+    "space-before-function-paren": "off"
   }
 }
