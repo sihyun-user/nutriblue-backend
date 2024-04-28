@@ -1,7 +1,11 @@
 const errorState = {
-  FAIL: {
-    statusCode: 500,
-    message: '系統錯誤，請稍後再試'
+  USER_NOT_LOGIN: {
+    statusCode: 403,
+    message: '使用者尚未登入'
+  },
+  USER_NOT_MATCH: {
+    statusCode: 403,
+    message: '無權限執行此操作'
   },
   USER_NOT_EXIST: {
     statusCode: 400,
@@ -27,18 +31,6 @@ const errorState = {
     statusCode: 400,
     message: '資料欄位未填寫正確'
   },
-  AUTH_NOT_EXIST: {
-    statusCode: 403,
-    message: '未提供授權憑證，請先登入'
-  },
-  AUTH_NOT_VALID: {
-    statusCode: 403,
-    message: '授權憑證無效或已過期，請重新登入'
-  },
-  AUTH_NOT_MATCH: {
-    statusCode: 403,
-    message: '無權限執行此操作'
-  },
   ROUTE_NOT_FOUND: {
     statusCode: 404,
     message: '找不到此路由'
@@ -54,6 +46,10 @@ const errorState = {
   ID_NOT_VALID: {
     statusCode: 400,
     message: '無效的ID'
+  },
+  FAIL: {
+    statusCode: 500,
+    message: '系統錯誤，請稍後再試'
   }
 };
 
