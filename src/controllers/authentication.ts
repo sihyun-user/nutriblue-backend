@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
 
 import { getUserByEmail, createUser } from '../modules/users';
-import { generateSendJWT } from '../helpers';
+import { generateSendJWT, clearToken } from '../helpers';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
@@ -55,12 +55,13 @@ export const register: RequestHandler = async (req, res, next) => {
     });
 
     AppSuccess({ res, message: '會員註冊成功' });
-  } catch (error) {
-    console.log('Caught an error:', error);
-    next(error);
-  }
+  } catch (error) {}
 };
 
 export const logout: RequestHandler = async (req, res, next) => {
+  try {
+    clearToken(res);
 
+    AppSuccess({ res, message: '會員登出成功' });
+  } catch (error) {}
 };
