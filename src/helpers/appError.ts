@@ -1,6 +1,6 @@
 type ErrorState = {
-  message: string;
   statusCode: number;
+  message: string;
 };
 
 class AppError extends Error {
