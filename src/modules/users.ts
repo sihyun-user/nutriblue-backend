@@ -2,9 +2,29 @@ import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true },
+    id: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
+    image: { type: String, default: '' },
+    gender: { type: String, default: '1', enum: ['0', '1'], required: true },
+    birthday: { type: String, default: '2000-01-01', required: true },
+    height: { type: Number, default: 0, required: true },
+    weight: { type: Number, default: 0, required: true },
+    sportLevel: {
+      type: String,
+      default: 'underSport',
+      enum: ['underSport', 'normalSport', 'moderateSport', 'severeSport', 'overSport'],
+      required: true
+    },
+    fitnessLevel: {
+      type: String,
+      default: 'keepWeight',
+      enum: ['loseFat', 'gentleLoseFat', 'keepWeight', 'gentleAddFat', 'addFat'],
+      required: true
+    },
+    bio: { type: String, default: '', maxlength: 100 },
     createdAt: { type: Date, default: Date.now, select: false }
   },
   {

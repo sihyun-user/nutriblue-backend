@@ -11,10 +11,6 @@ export const login: RequestHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      return next(new AppError(errorState.DATA_MISSING));
-    }
-
     const user = await getUserByEmail(email).select('+password');
 
     if (!user) {
@@ -22,6 +18,7 @@ export const login: RequestHandler = async (req, res, next) => {
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
+
     if (!passwordMatch) {
       return next(new AppError(errorState.USER_PASSWORD_ERROR));
     }
@@ -34,11 +31,7 @@ export const login: RequestHandler = async (req, res, next) => {
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
-
-    if (!username || !email || !password) {
-      return next(new AppError(errorState.DATA_MISSING));
-    }
+    const { id, name, username, email, password } = req.body;
 
     const existingUser = await getUserByEmail(email);
 
@@ -49,13 +42,17 @@ export const register: RequestHandler = async (req, res, next) => {
     const passwordHashed = await bcrypt.hash(password, 12);
 
     await createUser({
+      id,
+      name,
       username,
       email,
       password: passwordHashed
     });
 
     AppSuccess({ res, message: '會員註冊成功' });
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const logout: RequestHandler = async (req, res, next) => {

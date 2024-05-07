@@ -18,6 +18,7 @@ export const getUser: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
 
     const user = await getUserById(id);
+
     if (!user) {
       return next(new AppError(errorState.USER_NOT_EXIST));
     }
@@ -32,7 +33,7 @@ export const deleteUser: RequestHandler = async (req, res) => {
 
     await deleteUserById(id);
 
-    AppSuccess({ res, message: '刪除會員成功' });
+    AppSuccess({ res, message: '刪除會員資料成功' });
   } catch (error) {}
 };
 
@@ -54,5 +55,14 @@ export const updateUser: RequestHandler = async (req, res, next) => {
     await user.save();
 
     AppSuccess({ res, message: '更新會員成功' });
+  } catch (error) {}
+};
+
+export const updateUserPassword: RequestHandler = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+
+    AppSuccess({ res, message: '更新會員密碼成功' });
   } catch (error) {}
 };
