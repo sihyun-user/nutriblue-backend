@@ -1,5 +1,5 @@
 interface UserStateInfo {
-  userId: string;
+  id: string;
   username: string;
   email: string;
 }

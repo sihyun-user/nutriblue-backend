@@ -3,13 +3,13 @@ const errorState = {
     statusCode: 403,
     message: '使用者尚未登入'
   },
-  USER_NOT_MATCH: {
-    statusCode: 403,
-    message: '無權限執行此操作'
-  },
   USER_NOT_EXIST: {
     statusCode: 400,
     message: '使用者不存在'
+  },
+  USER_USERNAME_EXIST: {
+    statusCode: 400,
+    message: '使用者名稱已被使用'
   },
   USER_EAMIL_NOT_EXIST: {
     statusCode: 400,
@@ -46,10 +46,6 @@ const errorState = {
   ID_NOT_VALID: {
     statusCode: 400,
     message: '無效的ID'
-  },
-  VALID_DATA_ERROR: {
-    statusCode: 400,
-    message: '驗證資料錯誤:'
   },
   FAIL: {
     statusCode: 500,

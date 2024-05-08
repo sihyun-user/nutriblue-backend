@@ -15,10 +15,9 @@ export const getAllUser: RequestHandler = async (req, res) => {
 
 export const getUser: RequestHandler = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const id = req.user!.id;
 
     const user = await getUserById(id);
-
     if (!user) {
       return next(new AppError(errorState.USER_NOT_EXIST));
     }
@@ -29,7 +28,7 @@ export const getUser: RequestHandler = async (req, res, next) => {
 
 export const deleteUser: RequestHandler = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.user!.id;
 
     await deleteUserById(id);
 
@@ -39,12 +38,8 @@ export const deleteUser: RequestHandler = async (req, res) => {
 
 export const updateUser: RequestHandler = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const id = req.user!.id;
     const { username } = req.body;
-
-    if (!username) {
-      return next(new AppError(errorState.DATA_MISSING));
-    }
 
     const user = await getUserById(id);
     if (!user) {
@@ -60,9 +55,6 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 
 export const updateUserPassword: RequestHandler = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { password } = req.body;
-
     AppSuccess({ res, message: '更新會員密碼成功' });
   } catch (error) {}
 };

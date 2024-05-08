@@ -1,15 +1,10 @@
 import { z } from 'zod';
 
-import { required, noSpecialChar } from './index';
+import { required, nameValidator, usernameValidator } from './index';
 
 export const updateUserSchema = z.object({
-  name: noSpecialChar(2, '顯示名稱長度需大於 2 個字元'),
-  username: noSpecialChar(
-    6,
-    '使用者名稱長度需大於 6 個字元',
-    /^[a-zA-Z0-9]*$/,
-    '只能包含英文、數字'
-  ),
+  name: nameValidator,
+  username: usernameValidator,
   gender: z.string({ required_error: required('性別') }).regex(/^[01]$/, '性別只能為 0 或 1'),
   birthday: z
     .string({ required_error: required('生日') })

@@ -1,9 +1,9 @@
 import { Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
-export const generateSendJWT = (res: Response, userId: string) => {
+export const generateSendJWT = (res: Response, id: string) => {
   const jwtSecret = process.env.JWT_SECRET || '';
-  const token = jwt.sign({ userId }, jwtSecret, {
+  const token = jwt.sign({ id }, jwtSecret, {
     expiresIn: '3d'
   });
 
