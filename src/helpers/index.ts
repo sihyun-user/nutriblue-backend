@@ -7,20 +7,10 @@ export const generateSendJWT = (res: Response, id: string) => {
     expiresIn: '3d'
   });
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    maxAge: 3 * 24 * 60 * 60 * 1000
-  });
+  return token;
 };
 
 export const verifyJWT = (token: string) => {
   const jwtSecret = process.env.JWT_SECRET || '';
   return jwt.verify(token, jwtSecret) as JwtPayload;
-};
-
-export const clearToken = (res: Response) => {
-  res.cookie('token', '', {
-    httpOnly: true,
-    maxAge: 0
-  });
 };

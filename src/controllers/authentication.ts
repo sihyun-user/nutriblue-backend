@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
 
 import { getUserByUsername, getUserByEmail, createUser } from '../modules/users';
-import { generateSendJWT, clearToken } from '../helpers';
+import { generateSendJWT } from '../helpers';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
@@ -21,9 +21,9 @@ export const login: RequestHandler = async (req, res, next) => {
       return next(new AppError(errorState.USER_PASSWORD_ERROR));
     }
 
-    generateSendJWT(res, user._id.toString());
+    const token = generateSendJWT(res, user._id.toString());
 
-    AppSuccess({ res, message: '會員登入成功' });
+    AppSuccess({ res, data: { token }, message: '會員登入成功' });
   } catch (error) {}
 };
 
@@ -54,12 +54,4 @@ export const register: RequestHandler = async (req, res, next) => {
   } catch (error) {
     console.error(error);
   }
-};
-
-export const logout: RequestHandler = async (req, res) => {
-  try {
-    clearToken(res);
-
-    AppSuccess({ res, message: '會員登出成功' });
-  } catch (error) {}
 };
