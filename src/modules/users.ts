@@ -9,8 +9,8 @@ const UserSchema = new mongoose.Schema(
     image: { type: String, default: '' },
     gender: { type: String, default: '1', enum: ['0', '1'], required: true },
     birthday: { type: String, default: '2000-01-01', required: true },
-    height: { type: Number, default: 0, required: true },
-    weight: { type: Number, default: 0, required: true },
+    height: { type: String, default: '0', required: true },
+    weight: { type: String, default: '0', required: true },
     sportLevel: {
       type: String,
       default: 'underSport',

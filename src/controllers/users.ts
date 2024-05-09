@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+import bcrypt from 'bcryptjs';
 
 import { getUserById, getUsers, deleteUserById, updateUserById } from '../modules/users';
 import AppSuccess from '../helpers/appSuccess';
@@ -55,6 +56,13 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 
 export const updateUserPassword: RequestHandler = async (req, res, next) => {
   try {
+    const id = req.user!.id;
+    const { password } = req.body;
+
+    const passwordHashed = await bcrypt.hash(password, 12);
+
+    await updateUserById(id, { password: passwordHashed });
+
     AppSuccess({ res, message: '更新會員密碼成功' });
   } catch (error) {}
 };
