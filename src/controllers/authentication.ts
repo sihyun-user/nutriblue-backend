@@ -56,7 +56,7 @@ export const register: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const logout: RequestHandler = async (req, res, next) => {
+export const logout: RequestHandler = async (req, res) => {
   try {
     clearToken(res);
 

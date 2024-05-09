@@ -4,7 +4,7 @@ import { z } from 'zod';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
 
-export const validate =
+const validate =
   (schema: z.ZodObject<any>) => async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = schema.safeParse(req.body);
@@ -18,3 +18,5 @@ export const validate =
       next(new AppError(errorState.FAIL));
     }
   };
+
+export default validate;

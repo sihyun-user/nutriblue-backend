@@ -1,7 +1,7 @@
 import express from 'express';
 
 import * as authController from '../controllers/authentication';
-import { validate } from '../middlewares/validation';
+import validate from '../middlewares/validate';
 import { registerSchema, loginSchema } from '../schemas/authentication';
 
 export default (router: express.Router) => {

@@ -1,8 +1,8 @@
 import express from 'express';
 
 import * as usersController from '../controllers/users';
+import validate from '../middlewares/validate';
 import { isAuthenticated } from '../middlewares';
-import { validate } from '../middlewares/validation';
 import { updateUserSchema, updatePasswordSchema } from '../schemas/users';
 
 export default (router: express.Router) => {

@@ -12,7 +12,7 @@ export const getAllUser: RequestHandler = async (req, res) => {
   } catch (error) {}
 };
 
-export const getUser: RequestHandler = async (req, res, next) => {
+export const getUser: RequestHandler = async (req, res) => {
   try {
     const id = req.user!.id;
 
@@ -32,7 +32,7 @@ export const deleteUser: RequestHandler = async (req, res) => {
   } catch (error) {}
 };
 
-export const updateUser: RequestHandler = async (req, res, next) => {
+export const updateUser: RequestHandler = async (req, res) => {
   try {
     const id = req.user!.id;
     const { name, username, gender, birthday, height, weight, sportLevel, fitnessLevel, bio } =
@@ -54,7 +54,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
   } catch (error) {}
 };
 
-export const updateUserPassword: RequestHandler = async (req, res, next) => {
+export const updateUserPassword: RequestHandler = async (req, res) => {
   try {
     const id = req.user!.id;
     const { password } = req.body;
