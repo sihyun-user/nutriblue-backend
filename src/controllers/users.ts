@@ -1,9 +1,7 @@
 import { RequestHandler } from 'express';
 
-import { deleteUserById, getUserById, getUsers } from '../modules/users';
+import { getUserById, getUsers, deleteUserById, updateUserById } from '../modules/users';
 import AppSuccess from '../helpers/appSuccess';
-import AppError from '../helpers/appError';
-import errorState from '../helpers/errorState';
 
 export const getAllUser: RequestHandler = async (req, res) => {
   try {
@@ -18,9 +16,6 @@ export const getUser: RequestHandler = async (req, res, next) => {
     const id = req.user!.id;
 
     const user = await getUserById(id);
-    if (!user) {
-      return next(new AppError(errorState.USER_NOT_EXIST));
-    }
 
     AppSuccess({ res, data: user, message: '取得會員資料成功' });
   } catch (error) {}
@@ -39,15 +34,20 @@ export const deleteUser: RequestHandler = async (req, res) => {
 export const updateUser: RequestHandler = async (req, res, next) => {
   try {
     const id = req.user!.id;
-    const { username } = req.body;
+    const { name, username, gender, birthday, height, weight, sportLevel, fitnessLevel, bio } =
+      req.body;
 
-    const user = await getUserById(id);
-    if (!user) {
-      return next(new AppError(errorState.USER_NOT_EXIST));
-    }
-
-    user.username = username;
-    await user.save();
+    await updateUserById(id, {
+      name,
+      username,
+      gender,
+      birthday,
+      height,
+      weight,
+      sportLevel,
+      fitnessLevel,
+      bio
+    });
 
     AppSuccess({ res, message: '更新會員成功' });
   } catch (error) {}

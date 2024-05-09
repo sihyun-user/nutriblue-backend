@@ -17,5 +17,5 @@ export const updateUserSchema = z.object({
   fitnessLevel: z
     .string({ required_error: required('健身目標') })
     .regex(/^(loseFat|gentleLoseFat|keepWeight|gentleAddFat|addFat)$/, '健身目標格式錯誤'),
-  bio: z.string().max(100, '自我介紹長度需小於 100 個字元')
+  bio: z.string({ required_error: required('自我介紹') }).max(100, '自我介紹長度需小於 100 個字元')
 });
