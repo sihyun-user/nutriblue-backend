@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./src/index.ts",
+    "start": "cross-env NODE_ENV=production node ./dist/index.js",
     "dev": "cross-env NODE_ENV=development nodemon",
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
-    "format": "prettier --config .prettierrc.json --write src/**/*.ts"
+    "format": "prettier --config .prettierrc.json --write src/**/*.ts",
+    "render": "npm run build && npm run start"
   },
   "author": "",
   "license": "ISC",
