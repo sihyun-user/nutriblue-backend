@@ -7,10 +7,6 @@ const errorState = {
     statusCode: 400,
     message: '使用者不存在'
   },
-  USER_USERNAME_EXIST: {
-    statusCode: 400,
-    message: '使用者名稱已被使用'
-  },
   USER_EAMIL_NOT_EXIST: {
     statusCode: 400,
     message: 'Email不存在'

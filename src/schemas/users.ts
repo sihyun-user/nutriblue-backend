@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
-import { required, nameValidator, usernameValidator, passwordValidator } from './index';
+import { required, nameValidator, passwordValidator } from './index';
 
 export const updateUserSchema = z.object({
   name: nameValidator,
-  username: usernameValidator,
   gender: z.string({ required_error: required('性別') }).regex(/^[01]$/, '性別只能為 0 或 1'),
   birthday: z
     .string({ required_error: required('生日') })

@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { getUserByUsername, getUserByEmail, createUser } from '../modules/users';
+import { getUserByEmail, createUser } from '../modules/user';
 import { generateSendJWT } from '../helpers';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
@@ -29,12 +29,7 @@ export const login: RequestHandler = async (req, res, next) => {
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
-    const { name, username, email, password } = req.body;
-
-    const userByUsername = await getUserByUsername(username);
-    if (userByUsername) {
-      return next(new AppError(errorState.USER_USERNAME_EXIST));
-    }
+    const { name, email, password } = req.body;
 
     const userByEmail = await getUserByEmail(email);
     if (userByEmail) {
@@ -45,7 +40,6 @@ export const register: RequestHandler = async (req, res, next) => {
 
     await createUser({
       name,
-      username,
       email,
       password: passwordHashed
     });

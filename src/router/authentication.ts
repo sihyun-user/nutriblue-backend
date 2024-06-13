@@ -4,8 +4,11 @@ import * as authController from '../controllers/authentication';
 import validate from '../middlewares/validate';
 import { registerSchema, loginSchema } from '../schemas/authentication';
 
+const authRouter = express.Router();
+
+authRouter.post('/register', validate(registerSchema), authController.register);
+authRouter.post('/login', validate(loginSchema), authController.login);
+
 export default (router: express.Router) => {
-  router.post('/auth/register', validate(registerSchema), authController.register);
-  router.post('/auth/login', validate(loginSchema), authController.login);
-  router.get('/auth/logout', authController.logout);
+  router.use('/auth', authRouter);
 };

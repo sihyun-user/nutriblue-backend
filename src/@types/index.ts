@@ -1,6 +1,6 @@
 interface UserStateInfo {
   id: string;
-  username: string;
+  name: string;
   email: string;
 }
 

@@ -27,7 +27,7 @@ app.use(
   })
 );
 
-app.use('/', router());
+app.use('/api/v1', router());
 
 app.use('*', (req, res, next) => {
   next(new AppError(errorState.ROUTE_NOT_FOUND));

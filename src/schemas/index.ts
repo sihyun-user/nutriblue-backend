@@ -26,14 +26,6 @@ export const noSpecialChar = (
 
 export const nameValidator = noSpecialChar('名稱', 2, 12);
 
-export const usernameValidator = noSpecialChar(
-  '使用者名稱',
-  6,
-  20,
-  /^[a-zA-Z0-9]*$/,
-  '只能包含英文、數字'
-);
-
 export const emailValidator = z
   .string({ required_error: required('信箱') })
   .email({ message: '請輸入正確的信箱' });

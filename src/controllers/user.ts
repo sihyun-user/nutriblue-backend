@@ -1,16 +1,8 @@
 import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { getUserById, getUsers, deleteUserById, updateUserById } from '../modules/users';
+import { getUserById, deleteUserById, updateUserById } from '../modules/user';
 import AppSuccess from '../helpers/appSuccess';
-
-export const getAllUser: RequestHandler = async (req, res) => {
-  try {
-    const users = await getUsers();
-
-    AppSuccess({ res, data: users, message: '取得所有會員資料成功' });
-  } catch (error) {}
-};
 
 export const getUser: RequestHandler = async (req, res) => {
   try {
@@ -35,12 +27,11 @@ export const deleteUser: RequestHandler = async (req, res) => {
 export const updateUser: RequestHandler = async (req, res) => {
   try {
     const id = req.user!.id;
-    const { name, username, gender, birthday, height, weight, sportLevel, fitnessLevel, bio } =
+    const { name, gender, birthday, height, weight, sportLevel, fitnessLevel, bio } =
       req.body;
 
     await updateUserById(id, {
       name,
-      username,
       gender,
       birthday,
       height,

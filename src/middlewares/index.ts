@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 
-import { getUserById } from '../modules/users';
+import { getUserById } from '../modules/user';
 import { verifyJWT } from '../helpers';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
@@ -18,7 +18,7 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
       return next(new AppError(errorState.DATA_NOT_EXIST));
     }
 
-    const existingUser = await getUserById(decoded.id).select('+_id+email+username');
+    const existingUser = await getUserById(decoded.id).select('+_id+email+name');
     if (!existingUser) {
       return next(new AppError(errorState.USER_NOT_EXIST));
     }
@@ -26,7 +26,7 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
     req.user = {
       id: existingUser._id.toString(),
       email: existingUser.email,
-      username: existingUser.username
+      name: existingUser.name
     };
     next();
   } catch (error) {}
