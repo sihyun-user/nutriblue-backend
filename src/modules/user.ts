@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema(
       required: true
     },
     bio: { type: String, default: '', maxlength: 100 },
+    collects: [{ type: String, ref: 'user' }],
     createdAt: { type: Date, default: Date.now, select: false }
   },
   {
@@ -30,11 +31,11 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-export const Users = mongoose.model('User', UserSchema);
+export const User = mongoose.model('User', UserSchema);
 
-export const getUserById = (id: string) => Users.findById(id);
-export const getUserByEmail = (email: string) => Users.findOne({ email });
-export const createUser = (values: Record<string, any>) => Users.create(values);
-export const deleteUserById = (id: string) => Users.findByIdAndDelete({ _id: id });
+export const getUserById = (id: string) => User.findById(id);
+export const getUserByEmail = (email: string) => User.findOne({ email });
+export const createUser = (values: Record<string, any>) => User.create(values);
+export const deleteUserById = (id: string) => User.findByIdAndDelete({ _id: id });
 export const updateUserById = (id: string, values: Record<string, any>) =>
-  Users.findByIdAndUpdate(id, values);
+  User.findByIdAndUpdate(id, values);

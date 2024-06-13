@@ -1,16 +1,15 @@
 import express from 'express';
 
-import * as usersController from '../controllers/user';
-import validate from '../middlewares/validate';
+import * as userController from '../controllers/user';
 import { isAuthenticated } from '../middlewares';
-import { updateUserSchema, updatePasswordSchema } from '../schemas/users';
+import { updateUserSchema, updatePasswordSchema } from '../schemas/user';
 
 const userRouter = express.Router();
 
-userRouter.get('/', usersController.getUser);
-userRouter.delete('/', usersController.deleteUser);
-userRouter.patch('/', validate(updateUserSchema), usersController.updateUser);
-userRouter.patch('/password', validate(updatePasswordSchema), usersController.updateUserPassword);
+userRouter.get('/', userController.getUser);
+userRouter.delete('/', userController.deleteUser);
+userRouter.patch('/', updateUserSchema, userController.updateUser);
+userRouter.patch('/password', updatePasswordSchema, userController.updateUserPassword);
 
 export default (router: express.Router) => {
   router.use('/user', isAuthenticated, userRouter)
