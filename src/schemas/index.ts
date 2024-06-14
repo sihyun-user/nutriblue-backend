@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const required = (field: string) => `${field}為必填欄位`;
+export const requiredString = () => z.string({ required_error: '欄位未填寫正確' });
 
 export const noSpecialChar = (
   field: string,
@@ -9,7 +10,7 @@ export const noSpecialChar = (
   regex?: RegExp,
   regexMessage?: string
 ) => {
-  let schema = z.string({ required_error: required(field) });
+  let schema = requiredString();
   if (regex && regexMessage) {
     schema = schema.regex(regex, regexMessage);
   }

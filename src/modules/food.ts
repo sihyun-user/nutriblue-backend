@@ -17,6 +17,14 @@ const FoodSchema = new mongoose.Schema(
   }
 )
 
+FoodSchema.set('toJSON', {
+  virtuals: true,
+  transform: (doc, ret) => {
+    delete ret._id;
+    return ret;
+  }
+});
+
 export const Food = mongoose.model('Food', FoodSchema);
 
 export const createFood = (values: Record<string, any>) => Food.create(values);

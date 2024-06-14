@@ -31,6 +31,14 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
+UserSchema.set('toJSON', {
+  virtuals: true,
+  transform: (doc, ret) => {
+    delete ret._id;
+    return ret;
+  }
+});
+
 export const User = mongoose.model('User', UserSchema);
 
 export const getUserById = (id: string) => User.findById(id);
