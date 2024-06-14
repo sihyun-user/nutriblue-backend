@@ -10,6 +10,7 @@ const FoodSchema = new mongoose.Schema(
     unit: { type: String, default: 'g', enum: ['g', 'ml'] },
     unitWeight: { type: String, default: '0' },
     nutritions: { type: NutritionSchema },
+    certified: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now, select: false }
   },
   {
@@ -27,4 +28,7 @@ FoodSchema.set('toJSON', {
 
 export const Food = mongoose.model('Food', FoodSchema);
 
+
+export const getFoodsCount = () => Food.countDocuments();
+export const getFoods = (values: Record<string, any> = {}) => Food.find(values);
 export const createFood = (values: Record<string, any>) => Food.create(values);
