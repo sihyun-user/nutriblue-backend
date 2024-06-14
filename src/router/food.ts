@@ -7,6 +7,7 @@ import { createFoodSchema } from '../schemas/food';
 const foodRouter = express.Router();
 
 foodRouter.get('/', foodController.getFoodsPage);
+foodRouter.get('/:id', foodController.getFood);
 
 // 需要驗證用戶是否登入
 foodRouter.use(isAuthenticated);

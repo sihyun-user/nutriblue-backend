@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 
-import { createFood, getFoods, getFoodsCount } from '../modules/food';
+import { createFood, getFoods, getFoodsCount, getFoodById } from '../modules/food';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
@@ -39,6 +39,16 @@ export const getFoodsPage: RequestHandler = async (req, res) => {
   };
   AppSuccess({ res, data, message: '取得食物列表成功' });
 };
+
+export const getFood: RequestHandler = async (req, res, next) => {
+  const { id } = req.params;
+
+  const data = await getFoodById(id);
+
+  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
+
+  AppSuccess({ res, data, message: '取得食品成功' });
+}
 
 export const createNewFood: RequestHandler = async (req, res) => {
   const { name, subName, brandCompany, unit, unitWeight, nutritions } = req.body;

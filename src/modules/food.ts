@@ -31,4 +31,5 @@ export const Food = mongoose.model('Food', FoodSchema);
 
 export const getFoodsCount = () => Food.countDocuments();
 export const getFoods = (values: Record<string, any> = {}) => Food.find(values);
+export const getFoodById = (id: string) => Food.findById(id);
 export const createFood = (values: Record<string, any>) => Food.create(values);

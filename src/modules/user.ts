@@ -44,6 +44,6 @@ export const User = mongoose.model('User', UserSchema);
 export const getUserById = (id: string) => User.findById(id);
 export const getUserByEmail = (email: string) => User.findOne({ email });
 export const createUser = (values: Record<string, any>) => User.create(values);
-export const deleteUserById = (id: string) => User.findByIdAndDelete({ _id: id });
+export const deleteUserById = (id: string) => User.findByIdAndDelete(id);
 export const updateUserById = (id: string, values: Record<string, any>) =>
   User.findByIdAndUpdate(id, values);
