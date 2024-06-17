@@ -4,14 +4,19 @@ import NutritionSchema from './nutrition';
 
 const FoodSchema = new mongoose.Schema(
   {
+    type: { type: String, default: 'food' },
+    public: { type: Boolean, default: false },
+    verified: { type: Boolean, default: false },
     name: { type: String, required: true },
-    subName: { type: String, default: '' },
-    brandCompany: { type: String, default: '' },
-    unit: { type: String, default: 'g', enum: ['g', 'ml'] },
-    unitWeight: { type: String, default: '0' },
+    common_name: { type: String, default: '' },
+    brand_name: { type: String, default: '' },
+    serving_size: {
+      nutrition_multiplier: { type: Number, default: 1 },
+      unit: { type: String, default: 'g', enum: ['g', 'ml'] },
+      value: { type: Number, default: 0 }
+    },
     nutritions: { type: NutritionSchema },
-    certified: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now, select: false }
+    createdAt: { type: Date, default: Date.now }
   },
   {
     versionKey: false

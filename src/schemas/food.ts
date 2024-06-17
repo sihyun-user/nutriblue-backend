@@ -1,13 +1,18 @@
 import { z } from 'zod';
 
 import validate from '../middlewares/validate';
-import { requiredString, strNumValidator, nutritionsValidator } from './index';
+import { requiredString, numValidator, nutritionsValidator } from './index';
 
 export const createFoodSchema = validate(z.object({
+  public: z.boolean(),
+  verified: z.boolean(),
   name: requiredString(),
-  subName: requiredString(),
-  brandCompany: requiredString(),
-  unit: requiredString().regex(/^(g|ml)$/, '單位只能為 g 或 ml'),
-  unitWeight: strNumValidator('單位重量'),
+  common_name: requiredString(),
+  brand_name: requiredString(),
+  serving_size: z.object({
+    nutrition_multiplier: numValidator('份量倍數', 1),
+    unit: requiredString().regex(/^(g|ml)$/, '單位只能為 g 或 ml'),
+    value: numValidator('份量值'),
+  }),
   nutritions: nutritionsValidator,
 }));

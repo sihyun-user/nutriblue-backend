@@ -6,17 +6,17 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
     image: { type: String, default: '' },
-    gender: { type: String, default: '1', enum: ['0', '1'], required: true },
+    gender: { type: Number, default: 1, enum: [0, 1], required: true },
     birthday: { type: String, default: '2000-01-01', required: true },
-    height: { type: String, default: '0', required: true },
-    weight: { type: String, default: '0', required: true },
-    sportLevel: {
+    height: { type: Number, default: 0, required: true },
+    weight: { type: Number, default: 0, required: true },
+    sport_level: {
       type: String,
       default: 'underSport',
       enum: ['underSport', 'normalSport', 'moderateSport', 'severeSport', 'overSport'],
       required: true
     },
-    fitnessLevel: {
+    fitness_level: {
       type: String,
       default: 'keepWeight',
       enum: ['loseFat', 'gentleLoseFat', 'keepWeight', 'gentleAddFat', 'addFat'],
