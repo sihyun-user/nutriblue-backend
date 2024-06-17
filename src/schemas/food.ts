@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 import validate from '../middlewares/validate';
-import { requiredString, numValidator, nutritionsValidator } from './index';
+import { requiredString, requiredBoolean, numValidator, nutritionsValidator } from './index';
 
 export const createFoodSchema = validate(z.object({
-  public: z.boolean(),
-  verified: z.boolean(),
+  publiced: requiredBoolean(),
+  verified: requiredBoolean(),
   name: requiredString(),
   common_name: requiredString(),
   brand_name: requiredString(),

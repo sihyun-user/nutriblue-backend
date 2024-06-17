@@ -51,10 +51,16 @@ export const getFood: RequestHandler = async (req, res, next) => {
 }
 
 export const createNewFood: RequestHandler = async (req, res) => {
-  const { name, subName, brandCompany, unit, unitWeight, nutritions } = req.body;
+  const { publiced, verified, name, common_name, brand_name, serving_size, nutritions } = req.body;
 
   const data = await createFood({
-    name, subName, brandCompany, unit, unitWeight, nutritions
+    publiced,
+    verified,
+    name,
+    common_name,
+    brand_name,
+    serving_size,
+    nutritions
   });
 
   AppSuccess({ res, data, message: '新增食物成功' });

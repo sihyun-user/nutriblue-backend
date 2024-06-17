@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const required = (field: string) => `${field}為必填欄位`;
 export const requiredString = () => z.string({ required_error: '欄位未填寫正確' });
 export const requiredNumber = () => z.number({ required_error: '欄位未填寫正確'});
+export const requiredBoolean = () => z.boolean({ required_error: '欄位未填寫正確'});
 
 export const noSpecialChar = (
   field: string,
