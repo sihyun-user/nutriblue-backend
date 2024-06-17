@@ -8,6 +8,6 @@ export const createFoodSchema = validate(z.object({
   subName: requiredString(),
   brandCompany: requiredString(),
   unit: requiredString().regex(/^(g|ml)$/, '單位只能為 g 或 ml'),
-  unitWeight: strNumValidator('單位重量', 0),
+  unitWeight: strNumValidator('單位重量'),
   nutritions: nutritionsValidator,
 }));

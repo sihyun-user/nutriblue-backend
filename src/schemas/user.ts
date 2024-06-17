@@ -7,8 +7,8 @@ export const updateUserSchema = validate(z.object({
   name: nameValidator,
   gender: requiredString().regex(/^[01]$/, '性別只能為 0 或 1'),
   birthday: requiredString().regex(/^(\d{4})-(\d{2})-(\d{2})$/, '生日格式錯誤，請輸入 YYYY-MM-DD 格式'),
-  height: strNumValidator('身高', 0),
-  weight: strNumValidator('體重', 0),
+  height: strNumValidator('身高'),
+  weight: strNumValidator('體重'),
   sportLevel: requiredString()
     .regex(/^(underSport|normalSport|moderateSport|severeSport|overSport)$/, '運動量格式錯誤'),
   fitnessLevel: requiredString()
