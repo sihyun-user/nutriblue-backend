@@ -13,6 +13,7 @@ import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
 
+//TODO 只有管理員可以取得全部食品列表
 export const getFoodsPage: RequestHandler = async (req, res) => {
   const { pageIndex, pageSize } = req.query;
 
@@ -22,10 +23,11 @@ export const getFoodsPage: RequestHandler = async (req, res) => {
   const pageSizeNumber =
     pageSize !== undefined && pageSize !== '' ? parseInt(pageSize as string) : 10;
 
-  // ! 取得公開的食品&正確的食品數量
+  const isPubliced = { publiced: true };
+
   const [elementCount, elements] = await Promise.all([
-    getFoodsCount(),
-    getFoods()
+    getFoodsCount(isPubliced),
+    getFoods(isPubliced)
       .sort({ createdAt: -1 })
       .skip((pageIndexNumber - 1) * pageSizeNumber)
       .limit(pageSizeNumber)
