@@ -42,13 +42,18 @@ export const passwordValidator = z
 
 export const nutritionsValidator = z.object({
   calories: numValidator('卡路里'),
-  carbohydrates: numValidator('碳水化合物'),
   protein: numValidator('蛋白質'),
   fat: numValidator('脂肪'),
-  saturatedFat: numValidator('飽和脂肪'),
-  transFat: numValidator('反式脂肪'),
-  sodium: numValidator('鈉'),
+  saturated_fat: numValidator('飽和脂肪'),
+  trans_fat: numValidator('反式脂肪'),
+  carbohydrates: numValidator('碳水化合物'),
+  fiber: numValidator('膳食纖維'),
   sugar: numValidator('糖'),
+  sodium: numValidator('鈉'),
+  potassium: numValidator('鉀'),
+  calcium: numValidator('鈣'),
+  iron: numValidator('鐵'),
+  cholesterol: numValidator('膽固醇'),
 });
 
 
