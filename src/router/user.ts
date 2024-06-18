@@ -12,5 +12,5 @@ userRouter.patch('/', updateUserSchema, userController.updateUser);
 userRouter.patch('/password', updatePasswordSchema, userController.updateUserPassword);
 
 export default (router: express.Router) => {
-  router.use('/user', isAuthenticated, userRouter)
+  router.use('/user', isAuthenticated, userRouter);
 };

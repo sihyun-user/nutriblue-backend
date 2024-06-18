@@ -27,8 +27,7 @@ export const deleteUser: RequestHandler = async (req, res) => {
 export const updateUser: RequestHandler = async (req, res) => {
   try {
     const id = req.user!.id;
-    const { name, gender, birthday, height, weight, sport_level, fitness_level, bio } =
-      req.body;
+    const { name, gender, birthday, height, weight, sport_level, fitness_level, bio } = req.body;
 
     await updateUserById(id, {
       name,

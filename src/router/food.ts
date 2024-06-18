@@ -2,7 +2,7 @@ import express from 'express';
 
 import * as foodController from '../controllers/food';
 import { isAuthenticated } from '../middlewares';
-import { createFoodSchema } from '../schemas/food';
+import { foodSchema } from '../schemas/food';
 
 const foodRouter = express.Router();
 
@@ -11,8 +11,10 @@ foodRouter.get('/:id', foodController.getFood);
 
 // 需要驗證用戶是否登入
 foodRouter.use(isAuthenticated);
-foodRouter.post('/', createFoodSchema, foodController.createNewFood);
+foodRouter.post('/', foodSchema, foodController.createFood);
+foodRouter.patch('/:id', foodSchema, foodController.updateFood);
+foodRouter.delete('/:id', foodController.deleteFood);
 
 export default (router: express.Router) => {
-  router.use('/food', foodRouter)
+  router.use('/food', foodRouter);
 };

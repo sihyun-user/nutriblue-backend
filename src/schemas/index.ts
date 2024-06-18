@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 export const required = (field: string) => `${field}為必填欄位`;
 export const requiredString = () => z.string({ required_error: '欄位未填寫正確' });
-export const requiredNumber = () => z.number({ required_error: '欄位未填寫正確'});
-export const requiredBoolean = () => z.boolean({ required_error: '欄位未填寫正確'});
+export const requiredNumber = () => z.number({ required_error: '欄位未填寫正確' });
+export const requiredBoolean = () => z.boolean({ required_error: '欄位未填寫正確' });
 
 export const noSpecialChar = (
   field: string,
@@ -27,8 +27,8 @@ export const noSpecialChar = (
   );
 };
 
-export const numValidator = (field: string, minLength=0) => 
-  requiredNumber().refine(value => value >= minLength, `${field}不可小於${minLength}`);
+export const numValidator = (field: string, minLength = 0) =>
+  requiredNumber().refine((value) => value >= minLength, `${field}不可小於${minLength}`);
 
 export const nameValidator = noSpecialChar('名稱', 2, 12);
 
@@ -53,7 +53,5 @@ export const nutritionsValidator = z.object({
   potassium: numValidator('鉀'),
   calcium: numValidator('鈣'),
   iron: numValidator('鐵'),
-  cholesterol: numValidator('膽固醇'),
+  cholesterol: numValidator('膽固醇')
 });
-
-
