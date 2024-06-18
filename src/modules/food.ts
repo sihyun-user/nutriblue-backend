@@ -16,6 +16,7 @@ const FoodSchema = new mongoose.Schema(
       value: { type: Number, default: 0 }
     },
     nutritions: { type: NutritionSchema },
+    user_id: { type: String , required: true },
     createdAt: { type: Date, default: Date.now }
   },
   {

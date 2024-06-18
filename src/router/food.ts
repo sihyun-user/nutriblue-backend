@@ -7,13 +7,13 @@ import { foodSchema } from '../schemas/food';
 const foodRouter = express.Router();
 
 foodRouter.get('/', foodController.getFoodsPage);
-foodRouter.get('/:id', foodController.getFood);
+foodRouter.get('/:food_id', foodController.getFood);
 
 // 需要驗證用戶是否登入
 foodRouter.use(isAuthenticated);
 foodRouter.post('/', foodSchema, foodController.createFood);
-foodRouter.patch('/:id', foodSchema, foodController.updateFood);
-foodRouter.delete('/:id', foodController.deleteFood);
+foodRouter.patch('/:food_id', foodSchema, foodController.updateFood);
+foodRouter.delete('/:food_id', foodController.deleteFood);
 
 export default (router: express.Router) => {
   router.use('/food', foodRouter);

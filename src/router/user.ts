@@ -11,6 +11,8 @@ userRouter.delete('/', userController.deleteUser);
 userRouter.patch('/', updateUserSchema, userController.updateUser);
 userRouter.patch('/password', updatePasswordSchema, userController.updateUserPassword);
 
+userRouter.get('/food', userController.getUserFood);
+
 export default (router: express.Router) => {
   router.use('/user', isAuthenticated, userRouter);
 };

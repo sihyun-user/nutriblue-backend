@@ -23,7 +23,8 @@ const UserSchema = new mongoose.Schema(
       required: true
     },
     bio: { type: String, default: '', maxlength: 100 },
-    collects: [{ type: String, ref: 'user' }],
+    bookmark_collects: [{ type: String, ref: 'Food' }],
+    food_collects: [{ type: String, ref: 'Food' }],
     createdAt: { type: Date, default: Date.now, select: false }
   },
   {

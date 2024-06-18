@@ -8,6 +8,7 @@ import {
   updateFoodById,
   deleteFoodById
 } from '../modules/food';
+import { updateUserById } from '../modules/user';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
@@ -21,6 +22,7 @@ export const getFoodsPage: RequestHandler = async (req, res) => {
   const pageSizeNumber =
     pageSize !== undefined && pageSize !== '' ? parseInt(pageSize as string) : 10;
 
+  // ! 取得公開的食品&正確的食品數量
   const [elementCount, elements] = await Promise.all([
     getFoodsCount(),
     getFoods()
@@ -46,20 +48,20 @@ export const getFoodsPage: RequestHandler = async (req, res) => {
 };
 
 export const getFood: RequestHandler = async (req, res, next) => {
-  const { id } = req.params;
+  const { food_id } = req.params;
 
-  const data = await getFoodById(id);
+  const data = await getFoodById(food_id);
 
   if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
 
   AppSuccess({ res, data, message: '取得食品成功' });
 };
 
-export const updateFood: RequestHandler = async (req, res, next) => {心
-  const { id } = req.params;
+export const updateFood: RequestHandler = async (req, res, next) => {
+  const { food_id } = req.params;
   const { publiced, verified, name, common_name, brand_name, serving_size, nutritions } = req.body;
 
-  const data = await updateFoodById(id, {
+  const data = await updateFoodById(food_id, {
     publiced,
     verified,
     name,
@@ -75,9 +77,9 @@ export const updateFood: RequestHandler = async (req, res, next) => {心
 };
 
 export const deleteFood: RequestHandler = async (req, res, next) => {
-  const { id } = req.params;
+  const { food_id } = req.params;
 
-  const data = await deleteFoodById(id);
+  const data = await deleteFoodById(food_id);
 
   if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
 
@@ -85,7 +87,9 @@ export const deleteFood: RequestHandler = async (req, res, next) => {
 };
 
 export const createFood: RequestHandler = async (req, res) => {
-  const { publiced, verified, name, common_name, brand_name, serving_size, nutritions } = req.body;
+  const id = req.user!.id;
+
+  const { publiced, verified, name, common_name, brand_name, serving_size, nutritions } = req.body;;
 
   const data = await createNewFood({
     publiced,
@@ -94,7 +98,12 @@ export const createFood: RequestHandler = async (req, res) => {
     common_name,
     brand_name,
     serving_size,
-    nutritions
+    nutritions,
+    user_id: id
+  });
+
+  await updateUserById(id, {
+    $addToSet: { food_collects: data._id }
   });
 
   AppSuccess({ res, data, message: '新增食品成功' });
