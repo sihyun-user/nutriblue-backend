@@ -5,13 +5,12 @@ import { requiredString, requiredBoolean, numValidator, nutritionsValidator } fr
 
 export const foodSchema = validate(
   z.object({
-    publiced: requiredBoolean(),
-    verified: requiredBoolean(),
+    // publiced: requiredBoolean(),
+    // verified: requiredBoolean(),
     name: requiredString(),
     common_name: requiredString(),
     brand_name: requiredString(),
     serving_size: z.object({
-      nutrition_multiplier: numValidator('份量倍數', 1),
       unit: requiredString().regex(/^(g|ml)$/, '單位只能為 g 或 ml'),
       value: numValidator('份量值')
     }),

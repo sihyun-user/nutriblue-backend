@@ -13,7 +13,7 @@ const sendErrorProd = (err: AppError, res: Response) => {
     // log 紀錄
     console.error('出現系統錯誤', err);
     res.status(500).json({
-      status: 'error',
+      status: false,
       message: '系統錯誤，請洽系統管理員'
     });
   }

@@ -8,7 +8,6 @@ const NutritionSchema = new mongoose.Schema(
     saturated_fat: { type: Number, default: 0 },
     trans_fat: { type: Number, default: 0 },
     carbohydrates: { type: Number, default: 0 },
-    fiber: { type: Number, default: 0 },
     sugar: { type: Number, default: 0 },
     sodium: { type: Number, default: 0 },
     potassium: { type: Number, default: 0 },

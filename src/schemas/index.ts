@@ -47,7 +47,6 @@ export const nutritionsValidator = z.object({
   saturated_fat: numValidator('飽和脂肪'),
   trans_fat: numValidator('反式脂肪'),
   carbohydrates: numValidator('碳水化合物'),
-  fiber: numValidator('膳食纖維'),
   sugar: numValidator('糖'),
   sodium: numValidator('鈉'),
   potassium: numValidator('鉀'),
