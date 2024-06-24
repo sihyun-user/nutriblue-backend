@@ -3,7 +3,7 @@ import { z } from 'zod';
 import validate from '../middlewares/validate';
 import { nameValidator, emailValidator, passwordValidator } from './index';
 
-export const registerSchema = validate(
+export const signupSchema = validate(
   z.object({
     name: nameValidator,
     email: emailValidator,
