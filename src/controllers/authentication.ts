@@ -27,7 +27,7 @@ export const login: RequestHandler = async (req, res, next) => {
   } catch (error) {}
 };
 
-export const register: RequestHandler = async (req, res, next) => {
+export const signup: RequestHandler = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
@@ -38,13 +38,15 @@ export const register: RequestHandler = async (req, res, next) => {
 
     const passwordHashed = await bcrypt.hash(password, 12);
 
-    await createUser({
+    const user = await createUser({
       name,
       email,
       password: passwordHashed
     });
 
-    AppSuccess({ res, message: '會員註冊成功' });
+    const token = generateSendJWT(res, user._id.toString());
+
+    AppSuccess({ res, data: { token },  message: '會員註冊成功' });
   } catch (error) {
     console.error(error);
   }
