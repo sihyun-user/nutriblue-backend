@@ -25,6 +25,7 @@ const UserSchema = new mongoose.Schema(
     bio: { type: String, default: '', maxlength: 100 },
     bookmark_collects: [{ type: String, ref: 'Food' }],
     food_collects: [{ type: String, ref: 'Food' }],
+    refresh_token: { type: String, select: false },
     createdAt: { type: Date, default: Date.now, select: false }
   },
   {
