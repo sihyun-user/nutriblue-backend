@@ -50,7 +50,5 @@ export const nutritionsValidator = z.object({
   sugar: numValidator('糖'),
   sodium: numValidator('鈉'),
   potassium: numValidator('鉀'),
-  calcium: numValidator('鈣'),
-  iron: numValidator('鐵'),
   cholesterol: numValidator('膽固醇')
 });

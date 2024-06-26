@@ -7,8 +7,8 @@ import {
   getFoodById,
   updateFoodById,
   deleteFoodById
-} from '../modules/food';
-import { updateUserById } from '../modules/user';
+} from '../models/food';
+import { updateUserById } from '../models/user';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';

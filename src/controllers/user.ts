@@ -1,8 +1,8 @@
 import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { getUserById, deleteUserById, updateUserById } from '../modules/user';
-import { getFoods } from '../modules/food';
+import { getUserById, deleteUserById, updateUserById } from '../models/user';
+import { getFoods } from '../models/food';
 import AppSuccess from '../helpers/appSuccess';
 
 export const getUser: RequestHandler = async (req, res) => {

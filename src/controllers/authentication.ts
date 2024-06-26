@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { getUserByEmail, createUser, getUserById } from '../modules/user';
+import { getUserByEmail, createUser, getUserById } from '../models/user';
 import { generateSendJWT, verifyJWT } from '../helpers/auth';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';

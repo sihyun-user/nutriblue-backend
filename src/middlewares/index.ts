@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 
-import { getUserById } from '../modules/user';
+import { getUserById } from '../models/user';
 import { verifyJWT } from '../helpers/auth';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';

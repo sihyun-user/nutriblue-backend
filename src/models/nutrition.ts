@@ -11,8 +11,6 @@ const NutritionSchema = new mongoose.Schema(
     sugar: { type: Number, default: 0 },
     sodium: { type: Number, default: 0 },
     potassium: { type: Number, default: 0 },
-    calcium: { type: Number, default: 0 },
-    iron: { type: Number, default: 0 },
     cholesterol: { type: Number, default: 0 }
   },
   { _id: false }

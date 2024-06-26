@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { updateUserById } from '../modules/user';
+import { updateUserById } from '../models/user';
 
 export const generateSendJWT = async(res: Response, id: string) => {
   const jwtSecret = process.env.JWT_SECRET || '';
