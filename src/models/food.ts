@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 import NutritionSchema from './nutrition';
 
+
 const FoodSchema = new mongoose.Schema(
   {
     type: { type: String, default: 'food' },
@@ -11,9 +12,9 @@ const FoodSchema = new mongoose.Schema(
     common_name: { type: String, default: '' },
     brand_name: { type: String, default: '' },
     serving_size: {
-      nutrition_multiplier: { type: Number, default: 1 },
-      unit: { type: String, default: 'g', enum: ['g', 'ml'] },
-      value: { type: Number, default: 0 }
+      value: { type: Number, default: 0 }, // 每一份量數值
+      unit: { type: String, default: 'g' }, // 每一份量單位
+      container: { type: Number, default: 1 }, // 每包裝份數
     },
     nutritions: { type: NutritionSchema },
     user_id: { type: String , required: true },

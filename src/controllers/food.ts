@@ -50,9 +50,9 @@ export const getFoodsPage: RequestHandler = async (req, res) => {
 };
 
 export const getFood: RequestHandler = async (req, res, next) => {
-  const { food_id } = req.params;
+  const { foodId } = req.params;
 
-  const data = await getFoodById(food_id);
+  const data = await getFoodById(foodId);
 
   if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
 
@@ -60,14 +60,13 @@ export const getFood: RequestHandler = async (req, res, next) => {
 };
 
 export const updateFood: RequestHandler = async (req, res, next) => {
-  const { food_id } = req.params;
-  const { publiced, verified, name, common_name, brand_name, serving_size, nutritions } = req.body;
+  const { foodId } = req.params;
+  const { publiced, verified, name, brand_name, serving_size, nutritions } = req.body;
 
-  const data = await updateFoodById(food_id, {
+  const data = await updateFoodById(foodId, {
     publiced,
     verified,
     name,
-    common_name,
     brand_name,
     serving_size,
     nutritions
@@ -79,9 +78,9 @@ export const updateFood: RequestHandler = async (req, res, next) => {
 };
 
 export const deleteFood: RequestHandler = async (req, res, next) => {
-  const { food_id } = req.params;
+  const { foodId } = req.params;
 
-  const data = await deleteFoodById(food_id);
+  const data = await deleteFoodById(foodId);
 
   if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
 
@@ -89,22 +88,21 @@ export const deleteFood: RequestHandler = async (req, res, next) => {
 };
 
 export const createFood: RequestHandler = async (req, res) => {
-  const id = req.user!.id;
+  const userId = req.user!.id;
 
-  const { publiced, verified, name, common_name, brand_name, serving_size, nutritions } = req.body;;
+  const { publiced, verified, name, brand_name, serving_size, nutritions } = req.body;
 
   const data = await createNewFood({
     publiced,
     verified,
     name,
-    common_name,
     brand_name,
     serving_size,
     nutritions,
-    user_id: id
+    user_id: userId
   });
 
-  await updateUserById(id, {
+  await updateUserById(userId, {
     $addToSet: { food_collects: data._id }
   });
 

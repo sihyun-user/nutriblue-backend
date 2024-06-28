@@ -40,15 +40,15 @@ export const passwordValidator = z
   .string({ required_error: required('密碼') })
   .min(6, '密碼長度需大於 6 個字元');
 
-export const nutritionsValidator = z.object({
-  calories: numValidator('卡路里'),
-  protein: numValidator('蛋白質'),
-  fat: numValidator('脂肪'),
-  saturated_fat: numValidator('飽和脂肪'),
-  trans_fat: numValidator('反式脂肪'),
-  carbohydrates: numValidator('碳水化合物'),
-  sugar: numValidator('糖'),
-  sodium: numValidator('鈉'),
-  potassium: numValidator('鉀'),
-  cholesterol: numValidator('膽固醇')
-});
+// export const nutritionsValidator = z.object({
+//   calories: numValidator('卡路里'),
+//   protein: numValidator('蛋白質'),
+//   fat: numValidator('脂肪'),
+//   saturated_fat: numValidator('飽和脂肪'),
+//   trans_fat: numValidator('反式脂肪'),
+//   carbohydrates: numValidator('碳水化合物'),
+//   sugar: numValidator('糖'),
+//   sodium: numValidator('鈉'),
+//   potassium: numValidator('鉀'),
+//   cholesterol: numValidator('膽固醇')
+// });

@@ -7,9 +7,9 @@ import AppSuccess from '../helpers/appSuccess';
 
 export const getUser: RequestHandler = async (req, res) => {
   try {
-    const id = req.user!.id;
+    const userId = req.user!.id;
 
-    const user = await getUserById(id);
+    const user = await getUserById(userId);
 
     AppSuccess({ res, data: user, message: '取得會員資料成功' });
   } catch (error) {}
@@ -17,9 +17,9 @@ export const getUser: RequestHandler = async (req, res) => {
 
 export const deleteUser: RequestHandler = async (req, res) => {
   try {
-    const id = req.user!.id;
+    const userId = req.user!.id;
 
-    await deleteUserById(id);
+    await deleteUserById(userId);
 
     AppSuccess({ res, message: '刪除會員資料成功' });
   } catch (error) {}
@@ -27,10 +27,10 @@ export const deleteUser: RequestHandler = async (req, res) => {
 
 export const updateUser: RequestHandler = async (req, res) => {
   try {
-    const id = req.user!.id;
+    const userId = req.user!.id;
     const { name, gender, birthday, height, weight, sport_level, fitness_level, bio } = req.body;
 
-    await updateUserById(id, {
+    await updateUserById(userId, {
       name,
       gender,
       birthday,
@@ -47,21 +47,21 @@ export const updateUser: RequestHandler = async (req, res) => {
 
 export const updateUserPassword: RequestHandler = async (req, res) => {
   try {
-    const id = req.user!.id;
+    const userId = req.user!.id;
     const { password } = req.body;
 
     const passwordHashed = await bcrypt.hash(password, 12);
 
-    await updateUserById(id, { password: passwordHashed });
+    await updateUserById(userId, { password: passwordHashed });
 
     AppSuccess({ res, message: '更新會員密碼成功' });
   } catch (error) {}
 };
 
 export const getUserFood: RequestHandler = async (req, res) => {
-  const id = req.user!.id;
+  const userId = req.user!.id;
 
-  const user = await getUserById(id);
+  const user = await getUserById(userId);
 
   const data = await getFoods({ _id: { $in: user!.food_collects } });
 
@@ -69,22 +69,22 @@ export const getUserFood: RequestHandler = async (req, res) => {
 };
 
 export const addUserFoodCollects: RequestHandler = async (req, res) => {
-  const id = req.user!.id;
-  const { food_id } = req.params;
+  const userId = req.user!.id;
+  const { foodId } = req.params;
 
-  await updateUserById(id, {
-    $addToSet: { food_collects: food_id }
+  await updateUserById(userId, {
+    $addToSet: { food_collects: foodId }
   })
 
   AppSuccess({ res, message: '新增會員食品成功' });
 };
 
 export const deleteUserFoodCollects: RequestHandler = async (req, res) => {
-  const id = req.user!.id;
-  const { food_id } = req.params;
+  const userId = req.user!.id;
+  const { foodId } = req.params;
 
-  await updateUserById(id, {
-    $pull: { food_collects: food_id }
+  await updateUserById(userId, {
+    $pull: { food_collects: foodId }
   })
 
   AppSuccess({ res, message: '刪除會員食品成功' });
