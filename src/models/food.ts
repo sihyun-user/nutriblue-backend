@@ -18,6 +18,7 @@ const FoodSchema = new mongoose.Schema(
     },
     nutritions: { type: NutritionSchema },
     user_id: { type: String , required: true },
+    bookmark_collects: [{ type: String }],
     createdAt: { type: Date, default: Date.now }
   },
   {
@@ -41,4 +42,5 @@ export const getFoodById = (id: string) => Food.findById(id);
 export const createNewFood = (values: Record<string, any>) => Food.create(values);
 export const deleteFoodById = (id: string) => Food.findByIdAndDelete(id);
 export const updateFoodById = (id: string, values: Record<string, any>) =>
-  Food.findByIdAndUpdate(id, values);
+  Food.findByIdAndUpdate(id, values, { new: true, runValidators: true });
+export const getFoodByUserId = (id: string) => Food.find({ user_id: id });

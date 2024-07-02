@@ -23,8 +23,6 @@ const UserSchema = new mongoose.Schema(
       required: true
     },
     bio: { type: String, default: '', maxlength: 100 },
-    bookmark_collects: [{ type: String, ref: 'Food' }],
-    food_collects: [{ type: String, ref: 'Food' }],
     refresh_token: { type: String, select: false },
     createdAt: { type: Date, default: Date.now, select: false }
   },
@@ -48,4 +46,4 @@ export const getUserByEmail = (email: string) => User.findOne({ email });
 export const createUser = (values: Record<string, any>) => User.create(values);
 export const deleteUserById = (id: string) => User.findByIdAndDelete(id);
 export const updateUserById = (id: string, values: Record<string, any>) =>
-  User.findByIdAndUpdate(id, values);
+  User.findByIdAndUpdate(id, values, { new: true, runValidators: true });

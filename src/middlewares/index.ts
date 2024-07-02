@@ -30,6 +30,7 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
     };
     next();
   } catch (error) {
+    console.error(error);
     next(new AppError({ statusCode: 401, message: 'token error' }));
   }
 };

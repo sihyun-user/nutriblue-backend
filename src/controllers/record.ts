@@ -51,16 +51,15 @@ export const getRecordsPage: RequestHandler = async (req, res) => {
 export const createRecord: RequestHandler = async (req, res, next) => {
   try {
     const userId = req.user!.id;
-    const { foodId } = req.params;
 
-    const { multiplier, meal_name, record_date } = req.body;
+    const { food_id, multiplier, meal_name, record_date } = req.body;
 
-    const food = await getFoodById(foodId);
+    const food = await getFoodById(food_id);
     if (!food) return next(new AppError(errorState.DATA_NOT_EXIST));
 
     const data = await createNewRecord({
       user: userId,
-      food: foodId,
+      food: food_id,
       multiplier,
       meal_name,
       record_date

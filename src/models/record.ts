@@ -29,4 +29,4 @@ export const getRecordById = (id: string) => Record.findById(id);
 export const createNewRecord = (values: Record<string, any>) => Record.create(values);
 export const deleteRecordById = (id: string) => Record.findByIdAndDelete(id);
 export const updateRecordById = (id: string, values: Record<string, any>) =>
-  Record.findByIdAndUpdate(id, values);
+  Record.findByIdAndUpdate(id, values, { new: true, runValidators: true });

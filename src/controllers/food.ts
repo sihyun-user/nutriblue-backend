@@ -13,9 +13,14 @@ import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
 
-//TODO 只有管理員可以取得全部食品列表
 export const getFoodsPage: RequestHandler = async (req, res) => {
-  const { pageIndex, pageSize } = req.query;
+  const { query, publiced, pageIndex, pageSize } = req.query;
+
+  const queryContent = 
+    query !== undefined && query !== '' ? { name: new RegExp(query as string, 'i') } : {};
+    
+  const isPubliced = 
+    publiced !== undefined && publiced !== '' ? { publiced: publiced } : { publiced: true };
 
   const pageIndexNumber =
     pageIndex !== undefined && pageIndex !== '' ? parseInt(pageIndex as string) : 1;
@@ -23,11 +28,11 @@ export const getFoodsPage: RequestHandler = async (req, res) => {
   const pageSizeNumber =
     pageSize !== undefined && pageSize !== '' ? parseInt(pageSize as string) : 10;
 
-  const isPubliced = { publiced: true };
+  const content = { ...queryContent, ...isPubliced }
 
   const [elementCount, elements] = await Promise.all([
-    getFoodsCount(isPubliced),
-    getFoods(isPubliced)
+    getFoodsCount(content),
+    getFoods(content)
       .sort({ createdAt: -1 })
       .skip((pageIndexNumber - 1) * pageSizeNumber)
       .limit(pageSizeNumber)
@@ -49,19 +54,9 @@ export const getFoodsPage: RequestHandler = async (req, res) => {
   AppSuccess({ res, data, message: '取得食物列表成功' });
 };
 
-export const getFood: RequestHandler = async (req, res, next) => {
-  const { foodId } = req.params;
-
-  const data = await getFoodById(foodId);
-
-  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
-
-  AppSuccess({ res, data, message: '取得食品成功' });
-};
-
 export const updateFood: RequestHandler = async (req, res, next) => {
   const { foodId } = req.params;
-  const { publiced, verified, name, brand_name, serving_size, nutritions } = req.body;
+  const { food_id, publiced, verified, name, brand_name, serving_size, nutritions } = req.body;
 
   const data = await updateFoodById(foodId, {
     publiced,
@@ -107,4 +102,38 @@ export const createFood: RequestHandler = async (req, res) => {
   });
 
   AppSuccess({ res, data, message: '新增食品成功' });
+};
+
+export const getFoodBookmarksPage: RequestHandler = async (req, res, next) => {
+  const userId = req.user!.id;
+
+  const data = await getFoods({ bookmark_collects: { $in: userId } });
+
+  AppSuccess({ res, data, message: '取得食品書籤成功' });
+};
+
+export const createFoodBookmark: RequestHandler = async (req, res, next) => {
+  const userId = req.user!.id;
+  const { foodId } = req.params;
+
+  const data = await updateFoodById(foodId, {
+    $addToSet: { bookmark_collects: userId }
+  })
+
+  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
+
+  AppSuccess({ res, data, message: '新增食品書籤成功' });
+};
+
+export const deleteFoodBookmark: RequestHandler = async (req, res, next) => {
+  const userId = req.user!.id;
+  const { foodId } = req.params;
+
+  const data = await updateFoodById(foodId, {
+    $pull: { bookmark_collects: userId }
+  })
+
+  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
+
+  AppSuccess({ res, message: '刪除食品書籤成功' });
 };

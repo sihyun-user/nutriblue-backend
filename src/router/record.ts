@@ -6,7 +6,7 @@ import { isAuthenticated } from '../middlewares';
 const recordRouter = express.Router();
 
 recordRouter.get('/', recordController.getRecordsPage);
-recordRouter.post('/:foodId', recordController.createRecord);
+recordRouter.post('/', recordController.createRecord);
 recordRouter.patch('/:recordId', recordController.updateRecord);
 recordRouter.delete('/:recordId', recordController.deleteRecord);
 

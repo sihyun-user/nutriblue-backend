@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
 
 import { getUserById, deleteUserById, updateUserById } from '../models/user';
-import { getFoods } from '../models/food';
+import { getFoodByUserId } from '../models/food';
 import AppSuccess from '../helpers/appSuccess';
 
 export const getUser: RequestHandler = async (req, res) => {
@@ -61,31 +61,7 @@ export const updateUserPassword: RequestHandler = async (req, res) => {
 export const getUserFood: RequestHandler = async (req, res) => {
   const userId = req.user!.id;
 
-  const user = await getUserById(userId);
-
-  const data = await getFoods({ _id: { $in: user!.food_collects } });
+  const data = await getFoodByUserId(userId);
 
   AppSuccess({ res, data, message: '取得會員食品成功' });
-};
-
-export const addUserFoodCollects: RequestHandler = async (req, res) => {
-  const userId = req.user!.id;
-  const { foodId } = req.params;
-
-  await updateUserById(userId, {
-    $addToSet: { food_collects: foodId }
-  })
-
-  AppSuccess({ res, message: '新增會員食品成功' });
-};
-
-export const deleteUserFoodCollects: RequestHandler = async (req, res) => {
-  const userId = req.user!.id;
-  const { foodId } = req.params;
-
-  await updateUserById(userId, {
-    $pull: { food_collects: foodId }
-  })
-
-  AppSuccess({ res, message: '刪除會員食品成功' });
 };
