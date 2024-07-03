@@ -14,10 +14,6 @@ foodRouter.post('/', foodSchema, foodController.createFood);
 foodRouter.patch('/:foodId', foodSchema, foodController.updateFood);
 foodRouter.delete('/:foodId', foodController.deleteFood);
 
-foodRouter.get('/bookmark', foodController.getFoodBookmarksPage);
-foodRouter.post('/bookmark/:foodId', foodController.createFoodBookmark);
-foodRouter.delete('/bookmark/:foodId', foodController.deleteFoodBookmark);
-
 export default (router: express.Router) => {
   router.use('/food', foodRouter);
 };

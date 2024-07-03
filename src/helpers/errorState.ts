@@ -1,6 +1,6 @@
 const errorState = {
   USER_NOT_LOGIN: {
-    statusCode: 403,
+    statusCode: 401,
     message: '使用者尚未登入'
   },
   USER_NOT_EXIST: {

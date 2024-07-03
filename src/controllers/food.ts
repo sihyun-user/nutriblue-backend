@@ -4,7 +4,6 @@ import {
   createNewFood,
   getFoods,
   getFoodsCount,
-  getFoodById,
   updateFoodById,
   deleteFoodById
 } from '../models/food';
@@ -102,38 +101,4 @@ export const createFood: RequestHandler = async (req, res) => {
   });
 
   AppSuccess({ res, data, message: '新增食品成功' });
-};
-
-export const getFoodBookmarksPage: RequestHandler = async (req, res, next) => {
-  const userId = req.user!.id;
-
-  const data = await getFoods({ bookmark_collects: { $in: userId } });
-
-  AppSuccess({ res, data, message: '取得食品書籤成功' });
-};
-
-export const createFoodBookmark: RequestHandler = async (req, res, next) => {
-  const userId = req.user!.id;
-  const { foodId } = req.params;
-
-  const data = await updateFoodById(foodId, {
-    $addToSet: { bookmark_collects: userId }
-  })
-
-  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
-
-  AppSuccess({ res, data, message: '新增食品書籤成功' });
-};
-
-export const deleteFoodBookmark: RequestHandler = async (req, res, next) => {
-  const userId = req.user!.id;
-  const { foodId } = req.params;
-
-  const data = await updateFoodById(foodId, {
-    $pull: { bookmark_collects: userId }
-  })
-
-  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
-
-  AppSuccess({ res, message: '刪除食品書籤成功' });
 };
