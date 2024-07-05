@@ -43,6 +43,10 @@ const errorState = {
     statusCode: 400,
     message: '無效的ID'
   },
+  QUERY_ERROR: {
+    statusCode: 400,
+    message: '參數格式錯誤'
+  },
   FAIL: {
     statusCode: 500,
     message: '系統錯誤，請稍後再試'

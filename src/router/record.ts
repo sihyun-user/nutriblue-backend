@@ -10,6 +10,8 @@ recordRouter.post('/', recordController.createRecord);
 recordRouter.patch('/:recordId', recordController.updateRecord);
 recordRouter.delete('/:recordId', recordController.deleteRecord);
 
+recordRouter.get('/calendar', recordController.getRecordForCalendar);
+
 export default (router: express.Router) => {
   router.use('/record', isAuthenticated, recordRouter);
 };

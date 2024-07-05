@@ -17,7 +17,7 @@ export const updateUserSchema = validate(
     }),
     birthday: requiredString().regex(
       /^(\d{4})-(\d{2})-(\d{2})$/,
-      '生日格式錯誤，請輸入 YYYY-MM-DD 格式'
+      '生日格式錯誤，請輸入 yyyy-MM-dd 格式'
     ),
     height: numValidator('身高'),
     weight: numValidator('體重'),

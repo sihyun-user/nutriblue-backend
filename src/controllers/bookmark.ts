@@ -9,14 +9,11 @@ export const getBookmarksPage: RequestHandler = async (req, res, next) => {
   const userId = req.user!.id;
   const { query, pageIndex, pageSize } = req.query;
 
-  const queryContent = 
-    query !== undefined && query !== '' ? { name: new RegExp(query as string, 'i') } : {};
+  const queryContent = query ? { name: new RegExp(query as string, 'i') } : {};
 
-  const pageIndexNumber =
-    pageIndex !== undefined && pageIndex !== '' ? parseInt(pageIndex as string) : 1;
+  const pageIndexNumber = pageIndex ? parseInt(pageIndex as string) : 1;
 
-  const pageSizeNumber =
-    pageSize !== undefined && pageSize !== '' ? parseInt(pageSize as string) : 10;
+  const pageSizeNumber = pageSize ? parseInt(pageSize as string) : 10;
 
   const content = { ...queryContent, bookmark_collects: { $in: userId } };
 

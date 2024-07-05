@@ -6,7 +6,7 @@ const RecordSchema = new mongoose.Schema(
     food: { type: String, required: true, ref: 'Food' },
     multiplier: { type: Number, default: 1 },
     meal_name: { type: String, default: 'breakfast' },
-    record_date: { type: String, required: true } // MM/dd/yyyy
+    record_date: { type: String, required: true } // yyyy-MM-dd
   },
   {
     versionKey: false

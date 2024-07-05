@@ -9,7 +9,6 @@ const FoodSchema = new mongoose.Schema(
     publiced: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     name: { type: String, required: true },
-    common_name: { type: String, default: '' },
     brand_name: { type: String, default: '' },
     serving_size: {
       value: { type: Number, default: 0 }, // 每一份量數值

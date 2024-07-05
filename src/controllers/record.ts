@@ -1,7 +1,9 @@
 import { RequestHandler } from 'express';
+import { format, startOfMonth, endOfMonth } from 'date-fns';
 
 import { createNewRecord, deleteRecordById, getRecordsCount, getRecords, updateRecordById } from '../models/record';
 import { getFoodById } from '../models/food';
+import { isValidDate, formatedDate } from '../helpers'
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
@@ -11,11 +13,9 @@ export const getRecordsPage: RequestHandler = async (req, res) => {
     const userId = req.user!.id;
     const { pageIndex, pageSize } = req.query;
 
-    const pageIndexNumber =
-      pageIndex !== undefined && pageIndex !== '' ? parseInt(pageIndex as string) : 1;
+    const pageIndexNumber = pageIndex ? parseInt(pageIndex as string) : 1;
 
-    const pageSizeNumber =
-      pageSize !== undefined && pageSize !== '' ? parseInt(pageSize as string) : 10;
+    const pageSizeNumber = pageSize ? parseInt(pageSize as string) : 10;
 
       const [elementCount, elements] = await Promise.all([
         getRecordsCount({ user: userId }),
@@ -103,3 +103,26 @@ export const deleteRecord: RequestHandler = async (req, res, next) => {
     console.error(error);
   }
 };
+
+export const getRecordForCalendar: RequestHandler = async (req, res, next) => {
+  const userId = req.user!.id;
+  const { date } = req.query;
+
+  if (date && (typeof date !== 'string' || !isValidDate(date))) {
+    return next(new AppError(errorState.QUERY_ERROR));
+  }
+  
+  const currentDate: Date = date ? new Date(date) : new Date();
+  const firstDayOfMonth = formatedDate(startOfMonth(currentDate));
+  const lastDaysOfMonth = formatedDate(endOfMonth(currentDate));
+
+  const data = await getRecords({ 
+    user: userId, 
+    record_date: {
+      $gte: firstDayOfMonth,
+      $lte: lastDaysOfMonth
+    }
+  });
+
+  AppSuccess({ res, data, message: '取得當月紀錄成功' })
+}
