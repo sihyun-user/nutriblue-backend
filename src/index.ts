@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 import connect from './connections';
 import router from './router';
 import errHandle from './middlewares/error';
-import AppError from './helpers/appError';
+import appError from './helpers/appError';
 import errorState from './helpers/errorState';
 
 dotenv.config();
@@ -31,7 +31,7 @@ app.use(
 app.use('/api/v1', router());
 
 app.use('*', (req, res, next) => {
-  next(new AppError(errorState.ROUTE_NOT_FOUND));
+  appError(errorState.ROUTE_NOT_FOUND, next);
 });
 
 app.use(errHandle);

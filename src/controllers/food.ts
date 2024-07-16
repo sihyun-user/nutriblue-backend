@@ -9,9 +9,9 @@ import {
 } from '../models/food';
 import { updateUserById } from '../models/user';
 import catchAsync from '../helpers/catchAsync';
-import AppSuccess from '../helpers/appSuccess';
-import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
+import AppSuccess from '../helpers/appSuccess';
+import appError from '../helpers/appError';
 
 export const getFoodsPage: RequestHandler = catchAsync(async (req, res) => {
   const { query, publiced, pageIndex, pageSize } = req.query;
@@ -21,10 +21,10 @@ export const getFoodsPage: RequestHandler = catchAsync(async (req, res) => {
   const pageIndexNumber = pageIndex ? parseInt(pageIndex as string) : 1;
 
   const pageSizeNumber = pageSize ? parseInt(pageSize as string) : 10;
-    
+
   const isPubliced = publiced ? { publiced: publiced } : { publiced: true };
 
-  const content = { ...queryContent, ...isPubliced }
+  const content = { ...queryContent, ...isPubliced };
 
   const [elementCount, elements] = await Promise.all([
     getFoodsCount(content),
@@ -99,7 +99,9 @@ export const updateFood: RequestHandler = catchAsync(async (req, res, next) => {
     nutritions
   });
 
-  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
+  if (!data) {
+    return appError(errorState.DATA_NOT_EXIST, next);
+  }
 
   AppSuccess({ res, message: '更新食品成功' });
 });
@@ -109,7 +111,7 @@ export const deleteFood: RequestHandler = catchAsync(async (req, res, next) => {
 
   const data = await deleteFoodById(foodId);
 
-  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
+  if (!data) appError(errorState.DATA_NOT_EXIST, next);
 
   AppSuccess({ res, message: '刪除食品成功' });
 });

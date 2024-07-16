@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import errorState from '../helpers/errorState';
-import AppError from '../helpers/appError';
+import { AppError } from '../helpers/appError';
 
 const sendErrorProd = (err: AppError, res: Response) => {
   if (err.isOperational) {

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { z, ZodSchema } from 'zod';
+import { ZodSchema } from 'zod';
 
-import AppError from '../helpers/appError';
+import appError from '../helpers/appError';
 import errorState from '../helpers/errorState';
 
 const validate =
@@ -12,10 +12,10 @@ const validate =
         next();
       } else {
         const message = result.error.errors[0].message || '資料驗證錯誤';
-        next(new AppError({ statusCode: 400, message }));
+        appError({ statusCode: 400, message }, next);
       }
     } catch (error) {
-      next(new AppError(errorState.FAIL));
+      appError(errorState.FAIL, next);
     }
   };
 

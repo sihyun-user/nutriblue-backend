@@ -36,6 +36,5 @@ export const emailValidator = z
   .string({ required_error: required('信箱') })
   .email({ message: '請輸入正確的信箱' });
 
-export const passwordValidator = (field: string = '密碼') => z
-  .string({ required_error: required(field) })
-  .min(6, `${field}長度需大於 6 個字元`);
+export const passwordValidator = (field: string = '密碼') =>
+  z.string({ required_error: required(field) }).min(6, `${field}長度需大於 6 個字元`);

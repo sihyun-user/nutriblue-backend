@@ -3,24 +3,26 @@ import { RequestHandler } from 'express';
 import { getUserById } from '../models/user';
 import { verifyJWT } from '../helpers/auth';
 import catchAsync from '../helpers/catchAsync';
-import AppError from '../helpers/appError';
+import appError from '../helpers/appError';
 import errorState from '../helpers/errorState';
 
 export const isAuthenticated: RequestHandler = catchAsync(async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
-    return next(new AppError(errorState.USER_NOT_LOGIN));
+    return appError(errorState.USER_NOT_LOGIN, next);
   }
 
   const decoded = verifyJWT(token);
+
   if (!decoded || !decoded.id) {
-    return next(new AppError(errorState.DATA_NOT_EXIST));
+    return appError(errorState.DATA_NOT_EXIST, next);
   }
 
   const existingUser = await getUserById(decoded.id).select('+_id+email+name');
+
   if (!existingUser) {
-    return next(new AppError(errorState.USER_NOT_EXIST));
+    return appError(errorState.USER_NOT_EXIST, next);
   }
 
   req.user = {

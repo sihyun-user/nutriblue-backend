@@ -2,7 +2,7 @@ import { Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { updateUserById } from '../models/user';
 
-export const generateSendJWT = async(res: Response, id: string) => {
+export const generateSendJWT = async (res: Response, id: string) => {
   const jwtSecret = process.env.JWT_SECRET || '';
   const token = jwt.sign({ id }, jwtSecret, {
     expiresIn: '3d'
@@ -16,7 +16,7 @@ export const generateSendJWT = async(res: Response, id: string) => {
     refresh_token: refreshToken
   });
 
-  return { token, refreshToken  };
+  return { token, refreshToken };
 };
 
 export const verifyJWT = (token: string) => {

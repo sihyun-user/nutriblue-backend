@@ -1,9 +1,11 @@
+import { NextFunction } from 'express';
+
 type ErrorState = {
   statusCode: number;
   message: string;
 };
 
-class AppError extends Error {
+export class AppError extends Error {
   public errors?: { [key: string]: any };
   statusCode: number;
   isOperational: boolean;
@@ -16,4 +18,9 @@ class AppError extends Error {
   }
 }
 
-export default AppError;
+const appError = (errorState: ErrorState, next: NextFunction) => {
+  const error = new AppError(errorState);
+  next(error);
+};
+
+export default appError;

@@ -3,22 +3,22 @@ import { startOfMonth, endOfMonth } from 'date-fns';
 
 import { createNewRecord, deleteRecordById, getRecords, updateRecordById } from '../models/record';
 import { getFoodById } from '../models/food';
-import { formatedDate } from '../helpers'
+import { formatedDate } from '../helpers';
 import catchAsync from '../helpers/catchAsync';
-import AppSuccess from '../helpers/appSuccess';
-import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
+import AppSuccess from '../helpers/appSuccess';
+import appError from '../helpers/appError';
 
 export const gerRecordsByDate: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req.user!.id;
   const { dateId } = req.body;
 
-  if (!dateId) return next(new AppError(errorState.DATA_NOT_EXIST));
+  if (!dateId) return appError(errorState.DATA_NOT_EXIST, next);
 
   const data = await getRecords({ user: userId, record_date: dateId })
-    .populate({ 
-      path: 'food', 
-      select: '-bookmark_collects' 
+    .populate({
+      path: 'food',
+      select: '-bookmark_collects'
     })
     .select('-user');
 
@@ -31,7 +31,10 @@ export const createRecord: RequestHandler = catchAsync(async (req, res, next) =>
   const { food_id, multiplier, meal_name, record_date } = req.body;
 
   const food = await getFoodById(food_id);
-  if (!food) return next(new AppError(errorState.DATA_NOT_EXIST));
+
+  if (!food) {
+    return appError(errorState.DATA_NOT_EXIST, next);
+  }
 
   const data = await createNewRecord({
     user: userId,
@@ -54,7 +57,9 @@ export const updateRecord: RequestHandler = catchAsync(async (req, res, next) =>
     record_date
   });
 
-  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
+  if (!data) {
+    return appError(errorState.DATA_NOT_EXIST, next);
+  }
 
   AppSuccess({ res, message: '更新食品紀錄成功' });
 });
@@ -65,7 +70,9 @@ export const deleteRecord: RequestHandler = catchAsync(async (req, res, next) =>
 
     const data = await deleteRecordById(recordId);
 
-    if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
+    if (!data) {
+      return appError(errorState.DATA_NOT_EXIST, next);
+    }
 
     AppSuccess({ res, message: '刪除食品紀錄成功' });
   } catch (error) {
@@ -77,15 +84,17 @@ export const getRecordForCalendar: RequestHandler = catchAsync(async (req, res, 
   const userId = req.user!.id;
   const { calendarId } = req.body;
 
-  if (!calendarId) return next(new AppError(errorState.DATA_NOT_EXIST));
-  
+  if (!calendarId) {
+    return appError(errorState.DATA_NOT_EXIST, next);
+  }
+
   const [year, month] = calendarId.split('-');
   const currentDate = new Date(year, month - 1, 1);
   const firstDayOfMonth = formatedDate(startOfMonth(currentDate));
   const lastDaysOfMonth = formatedDate(endOfMonth(currentDate));
 
-  const records = await getRecords({ 
-    user: userId, 
+  const records = await getRecords({
+    user: userId,
     record_date: {
       $gte: firstDayOfMonth,
       $lte: lastDaysOfMonth
@@ -93,8 +102,9 @@ export const getRecordForCalendar: RequestHandler = catchAsync(async (req, res, 
   }).select('record_date');
 
   const getTimeStamp = (date: string) => new Date(date).getTime();
-  const data = [...new Set(records.map(record => record.record_date))]
-    .sort((a, b) => getTimeStamp(a) - getTimeStamp(b));
-  
-  AppSuccess({ res, data, message: '取得當月紀錄成功' })
+  const data = [...new Set(records.map((record) => record.record_date))].sort(
+    (a, b) => getTimeStamp(a) - getTimeStamp(b)
+  );
+
+  AppSuccess({ res, data, message: '取得當月紀錄成功' });
 });

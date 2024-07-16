@@ -2,9 +2,9 @@ import { RequestHandler } from 'express';
 
 import { getFoods, getFoodsCount, updateFoodById } from '../models/food';
 import catchAsync from '../helpers/catchAsync';
-import AppSuccess from '../helpers/appSuccess';
-import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
+import AppSuccess from '../helpers/appSuccess';
+import appError from '../helpers/appError';
 
 export const getBookmarksPage: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req.user!.id;
@@ -26,19 +26,19 @@ export const getBookmarksPage: RequestHandler = catchAsync(async (req, res, next
       .limit(pageSizeNumber)
   ]);
 
-    const firstPage = pageIndexNumber === 1;
-    const lastPage = elementCount <= pageIndexNumber * pageSizeNumber;
-    const empty = elementCount === 0;
-    const totalPages = Math.ceil(elementCount / pageSizeNumber);
-    const data = {
-      elements,
-      firstPage,
-      lastPage,
-      empty,
-      elementCount,
-      totalPages,
-      targetPage: pageIndexNumber
-    };
+  const firstPage = pageIndexNumber === 1;
+  const lastPage = elementCount <= pageIndexNumber * pageSizeNumber;
+  const empty = elementCount === 0;
+  const totalPages = Math.ceil(elementCount / pageSizeNumber);
+  const data = {
+    elements,
+    firstPage,
+    lastPage,
+    empty,
+    elementCount,
+    totalPages,
+    targetPage: pageIndexNumber
+  };
 
   AppSuccess({ res, data, message: '取得食品書籤成功' });
 });
@@ -49,9 +49,11 @@ export const createBookmark: RequestHandler = catchAsync(async (req, res, next) 
 
   const data = await updateFoodById(foodId, {
     $addToSet: { bookmark_collects: userId }
-  })
+  });
 
-  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
+  if (!data) {
+    return appError(errorState.DATA_NOT_EXIST, next);
+  }
 
   AppSuccess({ res, data, message: '新增食品書籤成功' });
 });
@@ -62,9 +64,11 @@ export const deleteBookmark: RequestHandler = catchAsync(async (req, res, next) 
 
   const data = await updateFoodById(foodId, {
     $pull: { bookmark_collects: userId }
-  })
+  });
 
-  if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
+  if (!data) {
+    return appError(errorState.DATA_NOT_EXIST, next);
+  }
 
   AppSuccess({ res, message: '刪除食品書籤成功' });
 });
