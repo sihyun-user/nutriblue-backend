@@ -22,7 +22,7 @@ export const getFoodsPage: RequestHandler = catchAsync(async (req, res) => {
 
   const pageSizeNumber = pageSize ? parseInt(pageSize as string) : 10;
 
-  const isPubliced = publiced ? { publiced: publiced } : { publiced: true };
+  const isPubliced = publiced ? { publiced } : { publiced: true };
 
   const content = { ...queryContent, ...isPubliced };
 
@@ -60,7 +60,7 @@ export const getUserFoodsPage: RequestHandler = catchAsync(async (req, res) => {
 
   const pageSizeNumber = pageSize ? parseInt(pageSize as string) : 10;
 
-  const content = { ...queryContent, user_id: userId };
+  const content = { ...queryContent, userId };
 
   const [elementCount, elements] = await Promise.all([
     getFoodsCount(content),
@@ -88,14 +88,14 @@ export const getUserFoodsPage: RequestHandler = catchAsync(async (req, res) => {
 
 export const updateFood: RequestHandler = catchAsync(async (req, res, next) => {
   const { foodId } = req.params;
-  const { publiced, verified, name, brand_name, serving_size, nutritions } = req.body;
+  const { publiced, verified, name, brandName, servingSize, nutritions } = req.body;
 
   const data = await updateFoodById(foodId, {
     publiced,
     verified,
     name,
-    brand_name,
-    serving_size,
+    brandName,
+    servingSize,
     nutritions
   });
 
@@ -111,7 +111,9 @@ export const deleteFood: RequestHandler = catchAsync(async (req, res, next) => {
 
   const data = await deleteFoodById(foodId);
 
-  if (!data) appError(errorState.DATA_NOT_EXIST, next);
+  if (!data) {
+    return appError(errorState.DATA_NOT_EXIST, next);
+  }
 
   AppSuccess({ res, message: '刪除食品成功' });
 });
@@ -119,20 +121,20 @@ export const deleteFood: RequestHandler = catchAsync(async (req, res, next) => {
 export const createFood: RequestHandler = catchAsync(async (req, res) => {
   const userId = req.user!.id;
 
-  const { publiced, verified, name, brand_name, serving_size, nutritions } = req.body;
+  const { publiced, verified, name, brandName, servingSize, nutritions } = req.body;
 
   const data = await createNewFood({
     publiced,
     verified,
     name,
-    brand_name,
-    serving_size,
+    brandName,
+    servingSize,
     nutritions,
-    user_id: userId
+    userId
   });
 
   await updateUserById(userId, {
-    $addToSet: { food_collects: data._id }
+    $addToSet: { foodCollects: data._id }
   });
 
   AppSuccess({ res, data, message: '新增食品成功' });

@@ -10,20 +10,19 @@ const UserSchema = new mongoose.Schema(
     birthday: { type: String, default: '2000-01-01', required: true },
     height: { type: Number, default: 0, required: true },
     weight: { type: Number, default: 0, required: true },
-    sport_level: {
+    sportLevel: {
       type: String,
       default: 'underSport',
       enum: ['underSport', 'normalSport', 'moderateSport', 'severeSport', 'overSport'],
       required: true
     },
-    fitness_level: {
+    fitnessLevel: {
       type: String,
       default: 'keepWeight',
       enum: ['loseFat', 'gentleLoseFat', 'keepWeight', 'gentleAddFat', 'addFat'],
       required: true
     },
-    bio: { type: String, default: '', maxlength: 100 },
-    refresh_token: { type: String, select: false },
+    refreshToken: { type: String, select: false },
     createdAt: { type: Date, default: Date.now, select: false }
   },
   {

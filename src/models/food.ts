@@ -8,15 +8,15 @@ const FoodSchema = new mongoose.Schema(
     publiced: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     name: { type: String, required: true },
-    brand_name: { type: String, default: '' },
-    serving_size: {
+    brandName: { type: String, default: '' },
+    servingSize: {
       value: { type: Number, default: 0 }, // 每一份量數值
       unit: { type: String, default: 'g' }, // 每一份量單位
       container: { type: Number, default: 1 } // 每包裝份數
     },
     nutritions: { type: NutritionSchema },
-    user_id: { type: String, required: true },
-    bookmark_collects: [{ type: String }],
+    userId: { type: String, required: true },
+    bookmarkCollects: [{ type: String }],
     createdAt: { type: Date, default: Date.now }
   },
   {
@@ -41,4 +41,4 @@ export const createNewFood = (values: Record<string, any>) => Food.create(values
 export const deleteFoodById = (id: string) => Food.findByIdAndDelete(id);
 export const updateFoodById = (id: string, values: Record<string, any>) =>
   Food.findByIdAndUpdate(id, values, { new: true, runValidators: true });
-export const getFoodByUserId = (id: string) => Food.find({ user_id: id });
+export const getFoodByUserId = (id: string) => Food.find({ userId: id });

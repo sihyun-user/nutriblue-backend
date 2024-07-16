@@ -13,7 +13,7 @@ export const generateSendJWT = async (res: Response, id: string) => {
   });
 
   await updateUserById(id, {
-    refresh_token: refreshToken
+    refreshToken: refreshToken
   });
 
   return { token, refreshToken };

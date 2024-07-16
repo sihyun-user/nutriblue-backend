@@ -5,8 +5,8 @@ const RecordSchema = new mongoose.Schema(
     user: { type: String, required: true, ref: 'User' },
     food: { type: String, required: true, ref: 'Food' },
     multiplier: { type: Number, default: 1 },
-    meal_name: { type: String, default: 'breakfast' },
-    record_date: { type: String, required: true } // yyyy-MM-dd
+    mealName: { type: String, default: 'breakfast' },
+    recordDate: { type: String, required: true } // yyyy-MM-dd
   },
   {
     versionKey: false

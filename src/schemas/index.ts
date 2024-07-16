@@ -38,3 +38,6 @@ export const emailValidator = z
 
 export const passwordValidator = (field: string = '密碼') =>
   z.string({ required_error: required(field) }).min(6, `${field}長度需大於 6 個字元`);
+
+export const dateValidator = (field: string) =>
+  requiredString().regex(/^(\d{4})-(\d{2})-(\d{2})$/, `${field} 格式錯誤，請輸入 yyyy-MM-dd 格式`);

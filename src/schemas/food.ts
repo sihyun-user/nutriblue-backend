@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import validate from '../middlewares/validate';
-import { requiredString, requiredBoolean, numValidator } from './index';
 
 export const foodSchema = validate(
   z
@@ -9,8 +8,8 @@ export const foodSchema = validate(
       publiced: z.boolean(),
       verified: z.boolean(),
       name: z.string(),
-      brand_name: z.string(),
-      serving_size: z.object({
+      brandName: z.string(),
+      servingSize: z.object({
         value: z.number(),
         unit: z.string(),
         container: z.number()
@@ -19,8 +18,8 @@ export const foodSchema = validate(
         calories: z.number(),
         protein: z.number(),
         fat: z.number(),
-        saturated_fat: z.number(),
-        trans_fat: z.number(),
+        saturatedFat: z.number(),
+        transFat: z.number(),
         carbohydrates: z.number(),
         sugar: z.number(),
         sodium: z.number(),

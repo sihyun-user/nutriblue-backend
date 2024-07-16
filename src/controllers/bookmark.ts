@@ -16,7 +16,7 @@ export const getBookmarksPage: RequestHandler = catchAsync(async (req, res, next
 
   const pageSizeNumber = pageSize ? parseInt(pageSize as string) : 10;
 
-  const content = { ...queryContent, bookmark_collects: { $in: userId } };
+  const content = { ...queryContent, bookmarkCollects: { $in: userId } };
 
   const [elementCount, elements] = await Promise.all([
     getFoodsCount(content),
@@ -48,7 +48,7 @@ export const createBookmark: RequestHandler = catchAsync(async (req, res, next) 
   const { foodId } = req.params;
 
   const data = await updateFoodById(foodId, {
-    $addToSet: { bookmark_collects: userId }
+    $addToSet: { bookmarkCollects: userId }
   });
 
   if (!data) {
@@ -63,7 +63,7 @@ export const deleteBookmark: RequestHandler = catchAsync(async (req, res, next) 
   const { foodId } = req.params;
 
   const data = await updateFoodById(foodId, {
-    $pull: { bookmark_collects: userId }
+    $pull: { bookmarkCollects: userId }
   });
 
   if (!data) {

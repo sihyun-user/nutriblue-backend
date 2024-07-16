@@ -9,16 +9,39 @@ import errorState from '../helpers/errorState';
 import AppSuccess from '../helpers/appSuccess';
 import appError from '../helpers/appError';
 
-export const gerRecordsByDate: RequestHandler = catchAsync(async (req, res, next) => {
+export const getRecordForCalendar: RequestHandler = catchAsync(async (req, res, next) => {
+  const userId = req.user!.id;
+  const { calendarId } = req.body;
+
+  const [year, month] = calendarId.split('-');
+  const currentDate = new Date(year, month - 1, 1);
+  const firstDayOfMonth = formatedDate(startOfMonth(currentDate));
+  const lastDaysOfMonth = formatedDate(endOfMonth(currentDate));
+
+  const records = await getRecords({
+    user: userId,
+    recordDate: {
+      $gte: firstDayOfMonth,
+      $lte: lastDaysOfMonth
+    }
+  }).select('recordDate');
+
+  const getTimeStamp = (date: string) => new Date(date).getTime();
+  const data = [...new Set(records.map((record) => record.recordDate))].sort(
+    (a, b) => getTimeStamp(a) - getTimeStamp(b)
+  );
+
+  AppSuccess({ res, data, message: '取得當月紀錄成功' });
+});
+
+export const getRecordsByDate: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req.user!.id;
   const { dateId } = req.body;
 
-  if (!dateId) return appError(errorState.DATA_NOT_EXIST, next);
-
-  const data = await getRecords({ user: userId, record_date: dateId })
+  const data = await getRecords({ user: userId, recordDate: dateId })
     .populate({
       path: 'food',
-      select: '-bookmark_collects'
+      select: '-bookmarkCollects'
     })
     .select('-user');
 
@@ -28,9 +51,9 @@ export const gerRecordsByDate: RequestHandler = catchAsync(async (req, res, next
 export const createRecord: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req.user!.id;
 
-  const { food_id, multiplier, meal_name, record_date } = req.body;
+  const { foodId, multiplier, mealName, recordDate } = req.body;
 
-  const food = await getFoodById(food_id);
+  const food = await getFoodById(foodId);
 
   if (!food) {
     return appError(errorState.DATA_NOT_EXIST, next);
@@ -38,10 +61,10 @@ export const createRecord: RequestHandler = catchAsync(async (req, res, next) =>
 
   const data = await createNewRecord({
     user: userId,
-    food: food_id,
+    food: foodId,
     multiplier,
-    meal_name,
-    record_date
+    mealName,
+    recordDate
   });
 
   AppSuccess({ res, data, message: '新增食品紀錄成功' });
@@ -49,12 +72,12 @@ export const createRecord: RequestHandler = catchAsync(async (req, res, next) =>
 
 export const updateRecord: RequestHandler = catchAsync(async (req, res, next) => {
   const { recordId } = req.params;
-  const { multiplier, meal_name, record_date } = req.body;
+  const { multiplier, mealName, recordDate } = req.body;
 
   const data = await updateRecordById(recordId, {
     multiplier,
-    meal_name,
-    record_date
+    mealName,
+    recordDate
   });
 
   if (!data) {
@@ -78,33 +101,4 @@ export const deleteRecord: RequestHandler = catchAsync(async (req, res, next) =>
   } catch (error) {
     console.error(error);
   }
-});
-
-export const getRecordForCalendar: RequestHandler = catchAsync(async (req, res, next) => {
-  const userId = req.user!.id;
-  const { calendarId } = req.body;
-
-  if (!calendarId) {
-    return appError(errorState.DATA_NOT_EXIST, next);
-  }
-
-  const [year, month] = calendarId.split('-');
-  const currentDate = new Date(year, month - 1, 1);
-  const firstDayOfMonth = formatedDate(startOfMonth(currentDate));
-  const lastDaysOfMonth = formatedDate(endOfMonth(currentDate));
-
-  const records = await getRecords({
-    user: userId,
-    record_date: {
-      $gte: firstDayOfMonth,
-      $lte: lastDaysOfMonth
-    }
-  }).select('record_date');
-
-  const getTimeStamp = (date: string) => new Date(date).getTime();
-  const data = [...new Set(records.map((record) => record.record_date))].sort(
-    (a, b) => getTimeStamp(a) - getTimeStamp(b)
-  );
-
-  AppSuccess({ res, data, message: '取得當月紀錄成功' });
 });

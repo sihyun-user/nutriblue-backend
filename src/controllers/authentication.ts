@@ -21,7 +21,7 @@ export const refreshToken: RequestHandler = catchAsync(async (req, res, next) =>
     return appError(errorState.DATA_NOT_EXIST, next);
   }
 
-  const existingUser = await getUserById(decoded.id).select('+_id+refresh_token');
+  const existingUser = await getUserById(decoded.id).select('+_id+refreshToken');
 
   if (!existingUser) {
     return appError(errorState.USER_NOT_EXIST, next);
