@@ -8,7 +8,7 @@ const userRouter = express.Router();
 
 userRouter.get('/', userController.getUser);
 userRouter.delete('/', userController.deleteUser);
-userRouter.patch('/', updateUserSchema, userController.updateUser);
+userRouter.patch('/profile', updateUserSchema, userController.updateUser);
 userRouter.patch('/password', updatePasswordSchema, userController.updateUserPassword);
 
 userRouter.get('/food', userController.getUserFood);

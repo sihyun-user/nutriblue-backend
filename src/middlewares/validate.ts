@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import { z } from 'zod';
+import { z, ZodSchema } from 'zod';
 
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
 
 const validate =
-  (schema: z.ZodObject<any>) => async (req: Request, res: Response, next: NextFunction) => {
+  (schema: ZodSchema<any>) => async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = schema.safeParse(req.body);
       if (result.success) {

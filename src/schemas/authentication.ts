@@ -7,13 +7,13 @@ export const signupSchema = validate(
   z.object({
     name: nameValidator,
     email: emailValidator,
-    password: passwordValidator
+    password: passwordValidator()
   })
 );
 
 export const loginSchema = validate(
   z.object({
     email: emailValidator,
-    password: passwordValidator
+    password: passwordValidator()
   })
 );

@@ -8,11 +8,12 @@ import {
   deleteFoodById
 } from '../models/food';
 import { updateUserById } from '../models/user';
+import catchAsync from '../helpers/catchAsync';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
 
-export const getFoodsPage: RequestHandler = async (req, res) => {
+export const getFoodsPage: RequestHandler = catchAsync(async (req, res) => {
   const { query, publiced, pageIndex, pageSize } = req.query;
 
   const queryContent = query ? { name: new RegExp(query as string, 'i') } : {};
@@ -47,9 +48,9 @@ export const getFoodsPage: RequestHandler = async (req, res) => {
     targetPage: pageIndexNumber
   };
   AppSuccess({ res, data, message: '取得食物列表成功' });
-};
+});
 
-export const getUserFoodsPage: RequestHandler = async (req, res) => {
+export const getUserFoodsPage: RequestHandler = catchAsync(async (req, res) => {
   const userId = req.user!.id;
   const { query, pageIndex, pageSize } = req.query;
 
@@ -83,9 +84,9 @@ export const getUserFoodsPage: RequestHandler = async (req, res) => {
     targetPage: pageIndexNumber
   };
   AppSuccess({ res, data, message: '取得使用者食物列表成功' });
-};
+});
 
-export const updateFood: RequestHandler = async (req, res, next) => {
+export const updateFood: RequestHandler = catchAsync(async (req, res, next) => {
   const { foodId } = req.params;
   const { publiced, verified, name, brand_name, serving_size, nutritions } = req.body;
 
@@ -101,9 +102,9 @@ export const updateFood: RequestHandler = async (req, res, next) => {
   if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
 
   AppSuccess({ res, message: '更新食品成功' });
-};
+});
 
-export const deleteFood: RequestHandler = async (req, res, next) => {
+export const deleteFood: RequestHandler = catchAsync(async (req, res, next) => {
   const { foodId } = req.params;
 
   const data = await deleteFoodById(foodId);
@@ -111,9 +112,9 @@ export const deleteFood: RequestHandler = async (req, res, next) => {
   if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
 
   AppSuccess({ res, message: '刪除食品成功' });
-};
+});
 
-export const createFood: RequestHandler = async (req, res) => {
+export const createFood: RequestHandler = catchAsync(async (req, res) => {
   const userId = req.user!.id;
 
   const { publiced, verified, name, brand_name, serving_size, nutritions } = req.body;
@@ -133,4 +134,4 @@ export const createFood: RequestHandler = async (req, res) => {
   });
 
   AppSuccess({ res, data, message: '新增食品成功' });
-};
+});

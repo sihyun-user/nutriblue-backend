@@ -1,11 +1,12 @@
 import { RequestHandler } from 'express';
 
 import { getFoods, getFoodsCount, updateFoodById } from '../models/food';
+import catchAsync from '../helpers/catchAsync';
 import AppSuccess from '../helpers/appSuccess';
 import AppError from '../helpers/appError';
 import errorState from '../helpers/errorState';
 
-export const getBookmarksPage: RequestHandler = async (req, res, next) => {
+export const getBookmarksPage: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req.user!.id;
   const { query, pageIndex, pageSize } = req.query;
 
@@ -40,9 +41,9 @@ export const getBookmarksPage: RequestHandler = async (req, res, next) => {
     };
 
   AppSuccess({ res, data, message: '取得食品書籤成功' });
-};
+});
 
-export const createBookmark: RequestHandler = async (req, res, next) => {
+export const createBookmark: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req.user!.id;
   const { foodId } = req.params;
 
@@ -53,9 +54,9 @@ export const createBookmark: RequestHandler = async (req, res, next) => {
   if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
 
   AppSuccess({ res, data, message: '新增食品書籤成功' });
-};
+});
 
-export const deleteBookmark: RequestHandler = async (req, res, next) => {
+export const deleteBookmark: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req.user!.id;
   const { foodId } = req.params;
 
@@ -66,4 +67,4 @@ export const deleteBookmark: RequestHandler = async (req, res, next) => {
   if (!data) return next(new AppError(errorState.DATA_NOT_EXIST));
 
   AppSuccess({ res, message: '刪除食品書籤成功' });
-};
+});

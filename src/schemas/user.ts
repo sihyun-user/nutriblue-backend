@@ -28,13 +28,16 @@ export const updateUserSchema = validate(
     fitness_level: requiredString().regex(
       /^(loseFat|gentleLoseFat|keepWeight|gentleAddFat|addFat)$/,
       '健身目標格式錯誤'
-    ),
-    bio: requiredString().max(100, '自我介紹長度需小於 100 個字元')
+    )
   })
 );
 
 export const updatePasswordSchema = validate(
   z.object({
-    password: passwordValidator
+    password: passwordValidator(),
+    confirm_password: passwordValidator('確認密碼')
+  }).refine((data) => data.password === data.confirm_password, {
+    message: '密碼和確認密碼必須相同',
+    path: ['confirm_password']
   })
 );
