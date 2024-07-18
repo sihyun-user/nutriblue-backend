@@ -3,13 +3,6 @@ import { z } from 'zod';
 import validate from '../middlewares/validate';
 import { requiredString, requiredNumber, dateValidator } from './index';
 
-//! 驗證 mogooseId
-export const recordIdParamsSchema = validate(
-  z.object({
-    recordId: requiredString()
-  })
-);
-
 export const getCalendarDateSchema = validate(
   z.object({
     calendarId: requiredString().regex(

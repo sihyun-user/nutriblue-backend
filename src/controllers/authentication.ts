@@ -27,7 +27,7 @@ export const refreshToken: RequestHandler = catchAsync(async (req, res, next) =>
     return appError(errorState.USER_NOT_EXIST, next);
   }
 
-  const { token } = await generateSendJWT(res, existingUser._id.toString());
+  const { token } = await generateSendJWT(existingUser._id.toString());
 
   AppSuccess({ res, data: { token }, message: 'refreshToke 更新成功' });
 });
@@ -47,7 +47,7 @@ export const login: RequestHandler = catchAsync(async (req, res, next) => {
     return appError(errorState.USER_PASSWORD_ERROR, next);
   }
 
-  const { token, refreshToken } = await generateSendJWT(res, user._id.toString());
+  const { token, refreshToken } = await generateSendJWT(user._id.toString());
 
   AppSuccess({ res, data: { token, refreshToken }, message: '會員登入成功' });
 });
@@ -69,7 +69,7 @@ export const signup: RequestHandler = catchAsync(async (req, res, next) => {
     password: passwordHashed
   });
 
-  const { token, refreshToken } = await generateSendJWT(res, user._id.toString());
+  const { token, refreshToken } = await generateSendJWT(user._id.toString());
 
   AppSuccess({ res, data: { token, refreshToken }, message: '會員註冊成功' });
 });

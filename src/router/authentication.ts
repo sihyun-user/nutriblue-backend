@@ -7,7 +7,7 @@ const authRouter = express.Router();
 
 authRouter.post('/signup', signupSchema, authController.signup);
 authRouter.post('/login', loginSchema, authController.login);
-authRouter.post('/refresh-token', authController.refreshToken);
+authRouter.post('/refreshToken', authController.refreshToken);
 
 export default (router: express.Router) => {
   router.use('/auth', authRouter);

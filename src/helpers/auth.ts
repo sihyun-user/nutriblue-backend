@@ -1,8 +1,7 @@
-import { Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { updateUserById } from '../models/user';
 
-export const generateSendJWT = async (res: Response, id: string) => {
+export const generateSendJWT = async (id: string) => {
   const jwtSecret = process.env.JWT_SECRET || '';
   const token = jwt.sign({ id }, jwtSecret, {
     expiresIn: '3d'
@@ -12,9 +11,7 @@ export const generateSendJWT = async (res: Response, id: string) => {
     expiresIn: '30d'
   });
 
-  await updateUserById(id, {
-    refreshToken: refreshToken
-  });
+  await updateUserById(id, { refreshToken });
 
   return { token, refreshToken };
 };

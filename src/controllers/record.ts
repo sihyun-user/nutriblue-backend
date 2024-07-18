@@ -88,17 +88,13 @@ export const updateRecord: RequestHandler = catchAsync(async (req, res, next) =>
 });
 
 export const deleteRecord: RequestHandler = catchAsync(async (req, res, next) => {
-  try {
-    const { recordId } = req.params;
+  const { recordId } = req.params;
 
-    const data = await deleteRecordById(recordId);
+  const data = await deleteRecordById(recordId);
 
-    if (!data) {
-      return appError(errorState.DATA_NOT_EXIST, next);
-    }
-
-    AppSuccess({ res, message: '刪除食品紀錄成功' });
-  } catch (error) {
-    console.error(error);
+  if (!data) {
+    return appError(errorState.DATA_NOT_EXIST, next);
   }
+
+  AppSuccess({ res, message: '刪除食品紀錄成功' });
 });
