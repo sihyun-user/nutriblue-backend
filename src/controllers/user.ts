@@ -64,6 +64,15 @@ export const getUserFood: RequestHandler = catchAsync(async (req, res) => {
   AppSuccess({ res, data, message: '取得會員食品成功' });
 });
 
+export const updateUserAvatar: RequestHandler = catchAsync(async (req, res) => {
+  const userId = req.user!.id;
+  const { avatar } = req.body;
+
+  const data = await updateUserById(userId, { avatar });
+
+  AppSuccess({ res, data, message: '更新會員頭像成功' });
+});
+
 export const updateImage: RequestHandler = catchAsync(async (req, res, next) => {
   const { file } = req;
 

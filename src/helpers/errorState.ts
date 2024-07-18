@@ -4,7 +4,7 @@ const errorState = {
     message: '使用者尚未登入'
   },
   USER_NOT_EXIST: {
-    statusCode: 400,
+    statusCode: 401,
     message: '使用者不存在'
   },
   USER_EAMIL_NOT_EXIST: {

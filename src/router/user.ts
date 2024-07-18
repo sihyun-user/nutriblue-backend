@@ -3,7 +3,7 @@ import multer from 'multer';
 
 import * as userController from '../controllers/user';
 import { isAuthenticated } from '../middlewares';
-import { updateUserSchema, updatePasswordSchema } from '../schemas/user';
+import { updateUserSchema, updatePasswordSchema, updateAvatarSchema } from '../schemas/user';
 
 const userRouter = express.Router();
 const upload = multer({
@@ -16,6 +16,7 @@ userRouter.get('/', userController.getUser);
 userRouter.delete('/', userController.deleteUser);
 userRouter.patch('/profile', updateUserSchema, userController.updateUser);
 userRouter.patch('/password', updatePasswordSchema, userController.updateUserPassword);
+userRouter.post('/avatar', updateAvatarSchema, userController.updateUserAvatar);
 userRouter.post('/upload-image', upload.single('file'), userController.updateImage);
 
 userRouter.get('/food', userController.getUserFood);

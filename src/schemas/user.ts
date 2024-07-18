@@ -41,3 +41,9 @@ export const updatePasswordSchema = validate(
       path: ['confirmPassword']
     })
 );
+
+export const updateAvatarSchema = validate(
+  z.object({
+    avatar: requiredString()
+  })
+);
