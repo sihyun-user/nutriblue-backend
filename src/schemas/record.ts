@@ -29,7 +29,6 @@ export const createRecordSchema = validate(
 
 export const updateRecordSchema = validate(
   z.object({
-    recordId: dateValidator('recordId'),
     multiplier: requiredNumber(),
     mealName: requiredString(),
     recordDate: dateValidator('recordDate')

@@ -2,9 +2,7 @@ import { RequestHandler } from 'express';
 
 import { getFoods, getFoodsCount, updateFoodById } from '../models/food';
 import catchAsync from '../helpers/catchAsync';
-import errorState from '../helpers/errorState';
 import AppSuccess from '../helpers/appSuccess';
-import appError from '../helpers/appError';
 
 export const getBookmarksPage: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req.user!.id;
@@ -47,28 +45,20 @@ export const createBookmark: RequestHandler = catchAsync(async (req, res, next) 
   const userId = req.user!.id;
   const { foodId } = req.params;
 
-  const data = await updateFoodById(foodId, {
+  await updateFoodById(foodId, {
     $addToSet: { bookmarkCollects: userId }
   });
 
-  if (!data) {
-    return appError(errorState.DATA_NOT_EXIST, next);
-  }
-
-  AppSuccess({ res, data, message: '新增食品書籤成功' });
+  AppSuccess({ res, message: '新增食品書籤成功' });
 });
 
 export const deleteBookmark: RequestHandler = catchAsync(async (req, res, next) => {
   const userId = req.user!.id;
   const { foodId } = req.params;
 
-  const data = await updateFoodById(foodId, {
+  await updateFoodById(foodId, {
     $pull: { bookmarkCollects: userId }
   });
-
-  if (!data) {
-    return appError(errorState.DATA_NOT_EXIST, next);
-  }
 
   AppSuccess({ res, message: '刪除食品書籤成功' });
 });
