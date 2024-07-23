@@ -18,8 +18,8 @@ userRouter.patch('/profile', updateUserSchema, userController.updateUser);
 userRouter.patch('/password', updatePasswordSchema, userController.updateUserPassword);
 userRouter.post('/avatar', updateAvatarSchema, userController.updateUserAvatar);
 userRouter.post('/upload-image', upload.single('file'), userController.updateImage);
-
-userRouter.get('/food', userController.getUserFood);
+userRouter.get('/healthy-report', userController.getHealthyReportByDate);
+userRouter.get('/analyze-results', userController.getAnalyzeResultsByDate);
 
 export default (router: express.Router) => {
   router.use('/user', isAuthenticated, userRouter);

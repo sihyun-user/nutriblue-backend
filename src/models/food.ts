@@ -4,7 +4,6 @@ import NutritionSchema from './nutrition';
 
 const FoodSchema = new mongoose.Schema(
   {
-    type: { type: String, default: 'food' },
     publiced: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     name: { type: String, required: true },

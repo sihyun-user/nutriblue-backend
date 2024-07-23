@@ -3,7 +3,9 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import { getUserById, deleteUserById, updateUserById } from '../models/user';
-import { getFoodByUserId } from '../models/food';
+import { getRecords } from '../models/record';
+import { formatedDate, calcCaloriesInTake } from '../helpers';
+import { IFood, INutritions } from '../types';
 import firebaseAdmin from '../connections/firsebase';
 import catchAsync from '../helpers/catchAsync';
 import errorState from '../helpers/errorState';
@@ -56,14 +58,6 @@ export const updateUserPassword: RequestHandler = catchAsync(async (req, res) =>
   AppSuccess({ res, message: '更新會員密碼成功' });
 });
 
-export const getUserFood: RequestHandler = catchAsync(async (req, res) => {
-  const userId = req.user!.id;
-
-  const data = await getFoodByUserId(userId);
-
-  AppSuccess({ res, data, message: '取得會員食品成功' });
-});
-
 export const updateUserAvatar: RequestHandler = catchAsync(async (req, res) => {
   const userId = req.user!.id;
   const { avatar } = req.body;
@@ -105,4 +99,149 @@ export const updateImage: RequestHandler = catchAsync(async (req, res, next) => 
   });
 
   blobStream.end(file.buffer);
+});
+
+export const getHealthyReportByDate: RequestHandler = catchAsync(async (req, res, next) => {
+  const userId = req.user!.id;
+  const date = formatedDate(new Date());
+
+  // 計算每日建議攝取熱量
+  const user = await getUserById(userId);
+
+  if (!user) {
+    return appError(errorState.DATA_NOT_EXIST, next);
+  }
+
+  const { birthday, weight, height, gender, sportLevel, fitnessLevel } = user;
+
+  const caloriesInTake = calcCaloriesInTake(
+    birthday,
+    weight,
+    height,
+    gender,
+    sportLevel,
+    fitnessLevel
+  );
+
+  // 當日實際攝取熱量
+  const records = await getRecords({ user: userId, recordDate: date })
+    .populate({
+      path: 'food',
+      select: '-bookmarkCollects -createdAt'
+    })
+    .select('food');
+
+  let foodCaloriesTake = records.reduce((acc, cur) => {
+    const food = cur.food as unknown as IFood;
+    return acc + food.nutritions.calories || 0;
+  }, 0);
+  foodCaloriesTake = Math.round(foodCaloriesTake);
+
+  // const sportReduces
+
+  const caloriesBalance = caloriesInTake - foodCaloriesTake;
+  const caloriespercent = +((foodCaloriesTake / caloriesInTake) * 100).toFixed(2);
+
+  const data = {
+    date,
+    caloriesInTake,
+    caloriesBalance,
+    caloriespercent,
+    foodCaloriesTake
+  };
+
+  AppSuccess({ res, data, message: '取得每日健康紀錄成功' });
+});
+
+export const getAnalyzeResultsByDate: RequestHandler = catchAsync(async (req, res, next) => {
+  const userId = req.user!.id;
+  const date = formatedDate(new Date());
+  function createInitialNutritions(): INutritions {
+    return {
+      calories: 0,
+      protein: 0,
+      carbohydrates: 0,
+      sugar: 0,
+      fat: 0,
+      saturatedFat: 0,
+      transFat: 0,
+      sodium: 0,
+      potassium: 0,
+      cholesterol: 0
+    };
+  }
+
+  const dateIntake: INutritions = createInitialNutritions();
+  const dateCurrentTake: INutritions = createInitialNutritions();
+  const datePercents: INutritions = createInitialNutritions();
+
+  // 計算每日建議攝取熱量
+  const user = await getUserById(userId);
+
+  if (!user) {
+    return appError(errorState.DATA_NOT_EXIST, next);
+  }
+
+  const { birthday, weight, height, gender, sportLevel, fitnessLevel } = user;
+
+  const caloriesInTak = calcCaloriesInTake(
+    birthday,
+    weight,
+    height,
+    gender,
+    sportLevel,
+    fitnessLevel
+  );
+
+  // 當日實際攝取營養
+  const records = await getRecords({ user: userId, recordDate: date })
+    .populate({
+      path: 'food',
+      select: '-bookmarkCollects -createdAt'
+    })
+    .select('food');
+
+  records.forEach((record) => {
+    const food = record.food as unknown as IFood;
+    const nutritions = food.nutritions;
+
+    for (const key in dateCurrentTake) {
+      if (Object.prototype.hasOwnProperty.call(dateCurrentTake, key)) {
+        dateCurrentTake[key] += nutritions[key as keyof INutritions] || 0;
+      }
+    }
+  });
+
+  for (const key in dateCurrentTake) {
+    if (Object.prototype.hasOwnProperty.call(dateCurrentTake, key)) {
+      dateCurrentTake[key] = Math.round(dateCurrentTake[key]);
+    }
+  }
+
+  // 當日建議攝取營養
+  dateIntake.calories = caloriesInTak;
+  dateIntake.protein = Math.round(caloriesInTak * 0.1);
+  dateIntake.carbohydrates = Math.round(caloriesInTak * 0.55);
+  dateIntake.sugar = Math.round(caloriesInTak * 0.1);
+  dateIntake.fat = Math.round(caloriesInTak * 0.2);
+  dateIntake.saturatedFat = Math.round(caloriesInTak * 0.1);
+  dateIntake.transFat = Math.round(caloriesInTak * 0.01);
+  dateIntake.sodium = 2000;
+  dateIntake.potassium = 2.7;
+  dateIntake.cholesterol = 300;
+
+  // 當日營養目前攝取百分比
+  for (const key in dateCurrentTake) {
+    if (Object.prototype.hasOwnProperty.call(dateCurrentTake, key)) {
+      datePercents[key] = +((dateCurrentTake[key] / dateIntake[key]) * 100).toFixed(2);
+    }
+  }
+
+  const data = {
+    dateIntake,
+    dateCurrentTake,
+    datePercents
+  };
+
+  AppSuccess({ res, data, message: '取得每日營養分析成功' });
 });
