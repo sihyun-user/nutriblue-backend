@@ -65,7 +65,7 @@ export const calcCaloriesInTake = (
       break;
     default:
   }
-  caloriesInTake = Math.round(caloriesInTake);
+  caloriesInTake = Math.round(caloriesInTake) > 0 ? Math.round(caloriesInTake) : 0;
 
   return caloriesInTake;
 };
