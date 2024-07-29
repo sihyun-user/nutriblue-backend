@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
-import bcrypt from 'bcryptjs';
+import { startOfMonth, endOfMonth } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcryptjs';
 
 import { getUserById, deleteUserById, updateUserById } from '../models/user';
 import { getRecords } from '../models/record';
@@ -249,4 +250,46 @@ export const getAnalyzeResultsByDate: RequestHandler = catchAsync(async (req, re
   };
 
   AppSuccess({ res, data, message: '取得每日營養分析成功' });
+});
+
+export const getRecordForCalendar: RequestHandler = catchAsync(async (req, res, next) => {
+  const userId = req.user!.id;
+  const { calendarId } = req.body;
+
+  const [year, month] = calendarId.split('-');
+  const currentDate = new Date(year, month - 1, 1);
+  const firstDayOfMonth = formatedDate(startOfMonth(currentDate));
+  const lastDaysOfMonth = formatedDate(endOfMonth(currentDate));
+  const getTimeStamp = (date: string) => new Date(date).getTime();
+
+  const records = await getRecords({
+    user: userId,
+    recordDate: {
+      $gte: firstDayOfMonth,
+      $lte: lastDaysOfMonth
+    }
+  }).select('recordDate');
+
+  const recordsData = [...new Set(records.map((record) => record.recordDate))].sort(
+    (a, b) => getTimeStamp(a) - getTimeStamp(b)
+  );
+
+  const sportRecords = await getSportRecords({
+    user: userId,
+    recordDate: {
+      $gte: firstDayOfMonth,
+      $lte: lastDaysOfMonth
+    }
+  }).select('recordDate');
+
+  const sportRecordsData = [...new Set(sportRecords.map((record) => record.recordDate))].sort(
+    (a, b) => getTimeStamp(a) - getTimeStamp(b)
+  );
+
+  const data = {
+    recordsData,
+    sportRecordsData
+  };
+
+  AppSuccess({ res, data, message: '取得當月紀錄成功' });
 });

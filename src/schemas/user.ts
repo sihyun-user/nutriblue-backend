@@ -47,3 +47,12 @@ export const updateAvatarSchema = validate(
     avatar: requiredString()
   })
 );
+
+export const getCalendarDateSchema = validate(
+  z.object({
+    calendarId: requiredString().regex(
+      /^(\d{4})-(\d{2})$/,
+      'calendarId 格式錯誤，請輸入 yyyy-MM-dd 格式'
+    )
+  })
+);
