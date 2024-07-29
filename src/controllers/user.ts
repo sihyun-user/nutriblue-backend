@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { getUserById, deleteUserById, updateUserById } from '../models/user';
 import { getRecords } from '../models/record';
+import { getSportRecords } from '../models/sportRecord';
 import { formatedDate, calcCaloriesInTake } from '../helpers';
 import { IFood, INutritions } from '../types';
 import firebaseAdmin from '../connections/firsebase';
@@ -137,17 +138,21 @@ export const getHealthyReportByDate: RequestHandler = catchAsync(async (req, res
   }, 0);
   foodCaloriesTake = Math.round(foodCaloriesTake);
 
-  // const sportReduces
-
   const caloriesBalance = caloriesInTake - foodCaloriesTake;
   const caloriespercent = +((foodCaloriesTake / caloriesInTake) * 100).toFixed(2);
+
+  // 當日運動消耗熱量
+  const sportRecords = await getSportRecords({ user: userId, recordDate: date });
+  const sportReduces = sportRecords.reduce((acc, cur) => acc + cur.sportValue, 0);
+  const sportCaloriesTake = Math.round(sportReduces);
 
   const data = {
     date,
     caloriesInTake,
     caloriesBalance,
     caloriespercent,
-    foodCaloriesTake
+    foodCaloriesTake,
+    sportCaloriesTake
   };
 
   AppSuccess({ res, data, message: '取得每日健康紀錄成功' });

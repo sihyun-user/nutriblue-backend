@@ -23,7 +23,6 @@ RecordSchema.set('toJSON', {
 
 export const Record = mongoose.model('Record', RecordSchema);
 
-export const getRecordsCount = (values: Record<string, any> = {}) => Record.countDocuments(values);
 export const getRecords = (values: Record<string, any> = {}) => Record.find(values);
 export const getRecordById = (id: string) => Record.findById(id);
 export const createNewRecord = (values: Record<string, any>) => Record.create(values);
