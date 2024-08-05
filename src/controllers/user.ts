@@ -131,16 +131,16 @@ export const getHealthyReportByDate: RequestHandler = catchAsync(async (req, res
       path: 'food',
       select: '-bookmarkCollects -createdAt'
     })
-    .select('food');
+    .select('food multiplier');
 
   let foodCaloriesTake = records.reduce((acc, cur) => {
     const food = cur.food as unknown as IFood;
-    return acc + food.nutritions.calories || 0;
+    return acc + food.nutritions.calories * cur.multiplier || 0;
   }, 0);
   foodCaloriesTake = Math.round(foodCaloriesTake);
 
   const caloriesBalance = caloriesInTake - foodCaloriesTake;
-  const caloriespercent = +((foodCaloriesTake / caloriesInTake) * 100).toFixed(2);
+  let caloriespercent = Math.min(+((foodCaloriesTake / caloriesInTake) * 100).toFixed(2), 100);
 
   // 當日運動消耗熱量
   const sportRecords = await getSportRecords({ user: userId, recordDate: date });
