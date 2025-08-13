@@ -73,3 +73,10 @@ export const signup: RequestHandler = catchAsync(async (req, res, next) => {
 
   AppSuccess({ res, data: { token, refreshToken }, message: '會員註冊成功' });
 });
+
+export const health: RequestHandler = (req, res) => {
+  return res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString()
+  });
+};
